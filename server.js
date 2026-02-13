@@ -1,32 +1,60 @@
 const express = require('express');
 const path = require('path');
-const { initDb, getAllWrappeds, getWrappedById, createWrapped } = require('./db');
+const crypto = require('crypto');
+const {
+  initDb, getPublicWrappeds, getWrappedById, createWrapped,
+  getAllWrappedsAdmin, deleteWrapped, setWrappedVisibility
+} = require('./db');
 const { seedDatabase } = require('./seed');
 
 const app = express();
 const PORT = process.env.PORT || 3000;
+const ADMIN_PASSWORD = process.env.ADMIN_PASSWORD || 'jA36jbPvTMHWBCk_';
+
+// Generate a stable token from the password so it survives restarts
+const ADMIN_TOKEN = crypto.createHmac('sha256', ADMIN_PASSWORD).update('claudentines-admin').digest('hex');
 
 // CORS — allow all origins (generated wrappeds POST from file:// origin)
 app.use((req, res, next) => {
   res.header('Access-Control-Allow-Origin', '*');
   res.header('Access-Control-Allow-Headers', 'Content-Type');
-  res.header('Access-Control-Allow-Methods', 'GET, POST, OPTIONS');
+  res.header('Access-Control-Allow-Methods', 'GET, POST, PATCH, DELETE, OPTIONS');
   if (req.method === 'OPTIONS') return res.sendStatus(200);
+  next();
+});
+
+// Parse cookies
+app.use((req, res, next) => {
+  req.cookies = {};
+  const header = req.headers.cookie;
+  if (header) {
+    header.split(';').forEach(c => {
+      const [k, ...v] = c.trim().split('=');
+      req.cookies[k] = decodeURIComponent(v.join('='));
+    });
+  }
   next();
 });
 
 // JSON body parser with generous limit for HTML blobs
 app.use(express.json({ limit: '500kb' }));
+app.use(express.urlencoded({ extended: false }));
 
 // Serve static files
 app.use(express.static(path.join(__dirname, 'public')));
 
-// ── API Routes ──
+// ── Admin Auth Middleware ──
+function requireAdmin(req, res, next) {
+  if (req.cookies.admin_token === ADMIN_TOKEN) return next();
+  return res.status(401).json({ error: 'Unauthorized' });
+}
+
+// ── Public API Routes ──
 
 // List all public wrappeds
 app.get('/api/wrappeds', async (req, res) => {
   try {
-    const wrappeds = await getAllWrappeds();
+    const wrappeds = await getPublicWrappeds();
     const result = wrappeds.map(w => ({
       id: w.id,
       names: w.names,
@@ -84,6 +112,83 @@ app.post('/api/wrappeds', async (req, res) => {
     res.json({ id, url: `/w/${id}` });
   } catch (err) {
     console.error('Error creating wrapped:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// ── Admin Routes ──
+
+// Serve admin login / dashboard page
+app.get('/admin', (req, res) => {
+  res.sendFile(path.join(__dirname, 'admin.html'));
+});
+
+// Admin login
+app.post('/admin/login', (req, res) => {
+  const { password } = req.body;
+
+  if (!password) {
+    return res.status(400).json({ error: 'Password required' });
+  }
+
+  // Timing-safe comparison
+  const input = Buffer.from(password);
+  const expected = Buffer.from(ADMIN_PASSWORD);
+
+  if (input.length !== expected.length || !crypto.timingSafeEqual(input, expected)) {
+    return res.status(401).json({ error: 'Wrong password' });
+  }
+
+  res.setHeader('Set-Cookie', `admin_token=${ADMIN_TOKEN}; Path=/; HttpOnly; SameSite=Strict; Max-Age=86400`);
+  res.json({ ok: true });
+});
+
+// Admin logout
+app.post('/admin/logout', (req, res) => {
+  res.setHeader('Set-Cookie', 'admin_token=; Path=/; HttpOnly; SameSite=Strict; Max-Age=0');
+  res.json({ ok: true });
+});
+
+// Check if admin is authenticated
+app.get('/admin/api/check', requireAdmin, (req, res) => {
+  res.json({ authenticated: true });
+});
+
+// List all wrappeds (admin view — includes private, sizes, etc.)
+app.get('/admin/api/wrappeds', requireAdmin, async (req, res) => {
+  try {
+    const wrappeds = await getAllWrappedsAdmin();
+    res.json(wrappeds);
+  } catch (err) {
+    console.error('Admin list error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Toggle visibility
+app.patch('/admin/api/wrappeds/:id', requireAdmin, async (req, res) => {
+  try {
+    const { is_public } = req.body;
+    if (typeof is_public === 'undefined') {
+      return res.status(400).json({ error: 'is_public is required' });
+    }
+    const updated = await setWrappedVisibility(req.params.id, is_public);
+    if (!updated) return res.status(404).json({ error: 'Not found' });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Admin update error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
+// Delete a wrapped
+app.delete('/admin/api/wrappeds/:id', requireAdmin, async (req, res) => {
+  try {
+    const deleted = await deleteWrapped(req.params.id);
+    if (!deleted) return res.status(404).json({ error: 'Not found' });
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Admin delete error:', err);
     res.status(500).json({ error: 'Internal server error' });
   }
 });

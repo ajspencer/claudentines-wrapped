@@ -19,8 +19,17 @@ async function initDb() {
       html_content TEXT,
       static_path TEXT,
       is_sample INTEGER DEFAULT 0,
+      is_public INTEGER DEFAULT 1,
       created_at TIMESTAMPTZ DEFAULT NOW()
     )
+  `);
+
+  // Migration: add is_public column if it doesn't exist (for existing DBs)
+  await pool.query(`
+    DO $$ BEGIN
+      ALTER TABLE wrappeds ADD COLUMN IF NOT EXISTS is_public INTEGER DEFAULT 1;
+    EXCEPTION WHEN duplicate_column THEN NULL;
+    END $$;
   `);
 }
 
@@ -28,10 +37,13 @@ function generateId() {
   return crypto.randomBytes(4).toString('hex');
 }
 
-async function getAllWrappeds() {
+// ── Public queries ──
+
+async function getPublicWrappeds() {
   const { rows } = await pool.query(`
     SELECT id, names, date_range, emoji, gradient, is_sample, created_at
     FROM wrappeds
+    WHERE is_public = 1
     ORDER BY is_sample DESC, created_at DESC
   `);
   return rows;
@@ -45,8 +57,8 @@ async function getWrappedById(id) {
 async function createWrapped({ names, date_range, emoji, gradient, html_content }) {
   const id = generateId();
   await pool.query(
-    `INSERT INTO wrappeds (id, names, date_range, emoji, gradient, html_content)
-     VALUES ($1, $2, $3, $4, $5, $6)`,
+    `INSERT INTO wrappeds (id, names, date_range, emoji, gradient, html_content, is_public)
+     VALUES ($1, $2, $3, $4, $5, $6, 1)`,
     [id, names, date_range, emoji || '💕', gradient, html_content]
   );
   return { id };
@@ -54,11 +66,46 @@ async function createWrapped({ names, date_range, emoji, gradient, html_content 
 
 async function upsertSample({ id, names, date_range, emoji, gradient, static_path }) {
   await pool.query(
-    `INSERT INTO wrappeds (id, names, date_range, emoji, gradient, static_path, is_sample)
-     VALUES ($1, $2, $3, $4, $5, $6, 1)
+    `INSERT INTO wrappeds (id, names, date_range, emoji, gradient, static_path, is_sample, is_public)
+     VALUES ($1, $2, $3, $4, $5, $6, 1, 1)
      ON CONFLICT (id) DO NOTHING`,
     [id, names, date_range, emoji, gradient, static_path]
   );
 }
 
-module.exports = { initDb, getAllWrappeds, getWrappedById, createWrapped, upsertSample };
+// ── Admin queries ──
+
+async function getAllWrappedsAdmin() {
+  const { rows } = await pool.query(`
+    SELECT id, names, date_range, emoji, gradient, is_sample, is_public,
+           created_at, static_path,
+           COALESCE(LENGTH(html_content), 0) AS html_size
+    FROM wrappeds
+    ORDER BY created_at DESC
+  `);
+  return rows;
+}
+
+async function deleteWrapped(id) {
+  const { rowCount } = await pool.query('DELETE FROM wrappeds WHERE id = $1', [id]);
+  return rowCount > 0;
+}
+
+async function setWrappedVisibility(id, isPublic) {
+  const { rowCount } = await pool.query(
+    'UPDATE wrappeds SET is_public = $1 WHERE id = $2',
+    [isPublic ? 1 : 0, id]
+  );
+  return rowCount > 0;
+}
+
+module.exports = {
+  initDb,
+  getPublicWrappeds,
+  getWrappedById,
+  createWrapped,
+  upsertSample,
+  getAllWrappedsAdmin,
+  deleteWrapped,
+  setWrappedVisibility
+};
