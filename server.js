@@ -61,7 +61,7 @@ app.get('/w/:id', (req, res) => {
 
 // Submit a new wrapped
 app.post('/api/wrappeds', (req, res) => {
-  const { names, date_range, emoji, gradient, html_content } = req.body;
+  const { names, date_range, emoji, gradient, html_content, visibility } = req.body;
 
   if (!names || !date_range || !html_content) {
     return res.status(400).json({ error: 'names, date_range, and html_content are required' });
@@ -71,7 +71,8 @@ app.post('/api/wrappeds', (req, res) => {
     return res.status(400).json({ error: 'html_content exceeds 500KB limit' });
   }
 
-  const { id } = createWrapped({ names, date_range, emoji, gradient, html_content });
+  const vis = visibility === 'private' ? 'private' : 'public';
+  const { id } = createWrapped({ names, date_range, emoji, gradient, html_content, visibility: vis });
   res.json({ id, url: `/w/${id}` });
 });
 

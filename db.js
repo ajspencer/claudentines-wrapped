@@ -17,9 +17,17 @@ db.exec(`
     html_content TEXT,
     static_path TEXT,
     is_sample INTEGER DEFAULT 0,
+    visibility TEXT DEFAULT 'public',
     created_at TEXT DEFAULT (datetime('now'))
   )
 `);
+
+// Add visibility column if it doesn't exist (migration for existing databases)
+try {
+  db.exec(`ALTER TABLE wrappeds ADD COLUMN visibility TEXT DEFAULT 'public'`);
+} catch (e) {
+  // Column already exists, ignore
+}
 
 function generateId() {
   return crypto.randomBytes(4).toString('hex');
@@ -29,6 +37,7 @@ function getAllWrappeds() {
   return db.prepare(`
     SELECT id, names, date_range, emoji, gradient, is_sample, created_at
     FROM wrappeds
+    WHERE visibility = 'public' OR is_sample = 1
     ORDER BY is_sample DESC, created_at DESC
   `).all();
 }
@@ -37,12 +46,12 @@ function getWrappedById(id) {
   return db.prepare('SELECT * FROM wrappeds WHERE id = ?').get(id);
 }
 
-function createWrapped({ names, date_range, emoji, gradient, html_content }) {
+function createWrapped({ names, date_range, emoji, gradient, html_content, visibility }) {
   const id = generateId();
   db.prepare(`
-    INSERT INTO wrappeds (id, names, date_range, emoji, gradient, html_content)
-    VALUES (?, ?, ?, ?, ?, ?)
-  `).run(id, names, date_range, emoji || '💕', gradient, html_content);
+    INSERT INTO wrappeds (id, names, date_range, emoji, gradient, html_content, visibility)
+    VALUES (?, ?, ?, ?, ?, ?, ?)
+  `).run(id, names, date_range, emoji || '💕', gradient, html_content, visibility || 'public');
   return { id };
 }
 
