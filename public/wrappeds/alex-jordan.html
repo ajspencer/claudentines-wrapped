@@ -346,38 +346,6 @@
             margin: 6px 0;
         }
 
-        /* Clock visualization */
-        .clock-ring {
-            width: 220px;
-            height: 220px;
-            margin: 1.5rem auto;
-            position: relative;
-        }
-
-        .clock-ring svg {
-            width: 100%;
-            height: 100%;
-            transform: rotate(-90deg);
-        }
-
-        .clock-center-text {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            text-align: center;
-        }
-
-        .clock-center-text .peak {
-            font-size: 2rem;
-            font-weight: 900;
-        }
-
-        .clock-center-text .peak-label {
-            font-size: 0.75rem;
-            opacity: 0.6;
-        }
-
         /* Streak fire */
         .streak-number {
             font-size: clamp(5rem, 18vw, 10rem);
@@ -475,6 +443,109 @@
         .bg-forest { background: linear-gradient(150deg, #0d2818 0%, #2e7d32 100%); }
         .bg-warmgold { background: linear-gradient(150deg, #3e2a0d 0%, #f9a825 100%); }
         .bg-finale { background: linear-gradient(150deg, #1a1040 0%, #4a148c 40%, #7c4dff 100%); }
+        .bg-midnight { background: linear-gradient(150deg, #0a0a2e 0%, #1a0a3e 50%, #2d1b69 100%); }
+        .bg-wine { background: linear-gradient(150deg, #2a0a1a 0%, #880e4f 50%, #ad1457 100%); }
+
+        /* Essence slide typography */
+        .essence-text {
+            font-size: clamp(1.4rem, 4.5vw, 2rem);
+            font-weight: 600;
+            line-height: 1.5;
+            font-style: italic;
+            opacity: 0.95;
+            letter-spacing: -0.3px;
+        }
+
+        /* Inside joke card */
+        .joke-card {
+            background: rgba(255,255,255,0.08);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 16px 20px;
+            margin: 8px 0;
+        }
+
+        .joke-card .joke-phrase {
+            font-size: 1.1rem;
+            font-weight: 800;
+            margin-bottom: 4px;
+        }
+
+        .joke-card .joke-context {
+            font-size: 0.82rem;
+            opacity: 0.5;
+            line-height: 1.4;
+        }
+
+        /* Love language viz */
+        .love-lang-row {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+            margin: 12px 0;
+        }
+
+        .love-lang-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.15);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.85rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .love-lang-detail {
+            flex: 1;
+        }
+
+        .love-lang-detail .name {
+            font-size: 0.85rem;
+            font-weight: 700;
+            margin-bottom: 2px;
+        }
+
+        .love-lang-detail .desc {
+            font-size: 0.82rem;
+            opacity: 0.6;
+            line-height: 1.4;
+        }
+
+        /* Kids prediction card */
+        .prediction-card {
+            background: rgba(255,255,255,0.07);
+            border-radius: 14px;
+            padding: 14px 18px;
+            margin: 8px 0;
+            display: flex;
+            gap: 12px;
+            align-items: flex-start;
+        }
+
+        .prediction-card .pred-emoji {
+            font-size: 1.4rem;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+
+        .prediction-card .pred-text {
+            font-size: 0.92rem;
+            font-weight: 500;
+            line-height: 1.5;
+            opacity: 0.85;
+        }
+
+        /* Letter styling */
+        .letter-text {
+            font-size: clamp(1.05rem, 3vw, 1.25rem);
+            font-weight: 400;
+            line-height: 1.8;
+            font-style: italic;
+            opacity: 0.9;
+        }
 
         /* Confetti */
         .confetti-container {
@@ -517,13 +588,13 @@
         <div class="intro-hearts" id="introHearts"></div>
         <div class="content" style="text-align:center; position:relative; z-index:2; max-width:600px;">
             <div class="intro-pulse-heart anim-scale">❤️</div>
-            <div class="intro-title anim-up-delay-1" style="text-align:center;">Claudentines<br>Wrapped</div>
-            <div class="intro-subtitle anim-up-delay-2" style="text-align:center;">Our first 8 months</div>
+            <div class="intro-title anim-up-delay-1" style="text-align:center;">Alex & Jordan's<br>Wrapped</div>
+            <div class="intro-subtitle anim-up-delay-2" style="text-align:center;">Jun 2024 – Feb 2025</div>
             <div class="small-text anim-up-delay-3" style="text-align:center; margin-top:2.5rem; letter-spacing:2px;">Tap to begin →</div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 1: TOTAL MESSAGES ═══ -->
+    <!-- ═══ SLIDE 1: TOTAL MESSAGES (data) ═══ -->
     <div class="slide bg-purple" data-duration="6000">
         <div class="content">
             <div class="eyebrow anim-up">Since June 14</div>
@@ -537,7 +608,7 @@
         </div>
     </div>
 
-    <!-- ═══ SLIDE 2: THE BEGINNING ═══ -->
+    <!-- ═══ SLIDE 2: THE BEGINNING (data) ═══ -->
     <div class="slide bg-deep" data-duration="7000">
         <div class="content">
             <div class="eyebrow anim-up">Where it started</div>
@@ -550,23 +621,20 @@
         </div>
     </div>
 
-    <!-- ═══ SLIDE 3: LONG DISTANCE SETUP ═══ -->
-    <div class="slide bg-blue" data-duration="6000">
-        <div class="content">
-            <div class="eyebrow anim-up">NYC ↔ Chicago</div>
-            <div class="big-text anim-up-delay-1">700 miles apart.</div>
-            <div class="body-text anim-up-delay-2" style="margin-top:1rem;">
-                Different cities. Different time zones (barely). Same conversation — 24 hours a day, 8 months straight.
+    <!-- ═══ SLIDE 3: THE ESSENCE (vibes) ═══ -->
+    <div class="slide bg-midnight" data-duration="7000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">The essence of you two</div>
+            <div class="essence-text anim-up-delay-1" style="text-align:center; margin-top:1rem;">
+                Two people who met by accident and then chose each other on purpose — every single day, across every mile, in every "goodnight" and every "landed" text.
             </div>
-            <div class="imsg-thread anim-up-delay-3" style="margin-top:1rem;">
-                <div class="imsg recv">When am I seeing you again</div>
-                <div class="imsg sent">Checking flights rn</div>
-                <div class="imsg recv">🥺❤️</div>
+            <div class="body-text anim-up-delay-2" style="text-align:center; margin-top:1.5rem; opacity:0.5; font-size:0.85rem;">
+                28,412 messages and not one of them was small talk.
             </div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 4: STREAK ═══ -->
+    <!-- ═══ SLIDE 4: TEXTING STREAK (data) ═══ -->
     <div class="slide bg-coral" data-duration="5000">
         <div class="content" style="text-align:center;">
             <div class="eyebrow anim-up" style="text-align:center;">Your texting streak</div>
@@ -578,7 +646,22 @@
         </div>
     </div>
 
-    <!-- ═══ SLIDE 5: MONTHLY BREAKDOWN ═══ -->
+    <!-- ═══ SLIDE 5: YOUR COUPLE VIBE (vibes) ═══ -->
+    <div class="slide bg-purple" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your couple vibe</div>
+            <div class="big-text anim-up-delay-1" style="font-size:clamp(1.4rem,4.5vw,2rem);">You two are:</div>
+            <div class="quote-bubble anim-up-delay-2">
+                <div style="font-size:1.8rem; margin-bottom:0.5rem;">🛫🌙🎧💌</div>
+                <div class="qt" style="font-style:normal; font-weight:700; font-size:1.2rem;">The "FaceTime-on-the-kitchen-counter, airport-reunion-tears, send-each-other-Spotify-links-at-2am" couple</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="margin-top:1rem; opacity:0.7; font-size:0.9rem;">
+                They debate whether deep dish or thin crust is real pizza, fall asleep on FaceTime, and have turned airport arrivals into an Olympic sport.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 6: MONTHLY BREAKDOWN (data) ═══ -->
     <div class="slide bg-teal" data-duration="7000">
         <div class="content">
             <div class="eyebrow anim-up">Messages by month</div>
@@ -630,18 +713,38 @@
                     <div class="bar-count">787</div>
                 </div>
             </div>
-            <div class="body-text anim-up-delay-3" style="opacity:0.6; font-size:0.85rem;">4,105 messages in August. That's the first-trip-together month.</div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.6; font-size:0.85rem;">4,105 messages in August. The first-trip-together month.</div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 6: PEAK HOURS ═══ -->
-    <div class="slide bg-purple" data-duration="6000">
+    <!-- ═══ SLIDE 7: THINGS ONLY YOU TWO SAY (vibes) ═══ -->
+    <div class="slide bg-sunset" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">If you know, you know</div>
+            <div class="medium-text anim-up-delay-1">Things only you two say</div>
+            <div class="joke-card anim-up-delay-2">
+                <div class="joke-phrase">"landed ✈️"</div>
+                <div class="joke-context">Sent the second the wheels touch down. 14 times. The text that means "I'm almost to you."</div>
+            </div>
+            <div class="joke-card anim-up-delay-3">
+                <div class="joke-phrase">"tell me something good"</div>
+                <div class="joke-context">How Jordan starts every nightly FaceTime. It's become a ritual — the opening line of every night.</div>
+            </div>
+            <div class="joke-card anim-up-delay-4">
+                <div class="joke-phrase">"table 7 energy"</div>
+                <div class="joke-context">A reference to the wedding table where you met. Now it means any situation where something unexpectedly good happens.</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 8: PEAK HOURS (data) ═══ -->
+    <div class="slide bg-blue" data-duration="6000">
         <div class="content" style="text-align:center;">
             <div class="eyebrow anim-up" style="text-align:center;">Your peak texting hour</div>
             <div class="big-number anim-scale" style="text-align:center; font-size:clamp(4rem,14vw,7rem);">11 PM</div>
             <div class="medium-text anim-up-delay-2" style="text-align:center;">2,340 messages sent between 11pm–midnight</div>
             <div class="body-text anim-up-delay-3" style="text-align:center; margin-top:1rem; opacity:0.6;">
-                You're both night owls separated by a timezone.
+                Night owls separated by a timezone.
             </div>
             <div class="body-text anim-up-delay-4" style="text-align:center; margin-top:0.5rem; opacity:0.4; font-size:0.85rem;">
                 FaceTime on the nightstand, texting until someone falls asleep first.
@@ -649,65 +752,35 @@
         </div>
     </div>
 
-    <!-- ═══ SLIDE 7: BUSIEST DAY ═══ -->
-    <div class="slide bg-orange" data-duration="6000">
+    <!-- ═══ SLIDE 9: HOW YOU SHOW LOVE (vibes) ═══ -->
+    <div class="slide bg-wine" data-duration="7000">
         <div class="content">
-            <div class="eyebrow anim-up">Your biggest texting day</div>
-            <div class="big-text anim-up-delay-1">July 4th</div>
-            <div class="big-number anim-count" style="font-size:clamp(3rem,12vw,6rem);">612</div>
-            <div class="body-text anim-up-delay-2">messages in one day.</div>
-            <div class="body-text anim-up-delay-3" style="margin-top:1rem; opacity:0.7;">
-                Independence Day — but neither of you was feeling very independent. You planned your first visit that night.
+            <div class="eyebrow anim-up">Your love languages (in texts)</div>
+            <div class="medium-text anim-up-delay-1">How you each show love</div>
+
+            <div class="love-lang-row anim-up-delay-2">
+                <div class="love-lang-avatar">A</div>
+                <div class="love-lang-detail">
+                    <div class="name">Alex</div>
+                    <div class="desc">Sends rapid-fire messages — 4 or 5 in a row. Heavy on the planning: "what if we did this," "I just found flights for $89," "checking if I can take Friday off." Shows love through logistics. Makes the distance feel solvable.</div>
+                </div>
+            </div>
+
+            <div class="love-lang-row anim-up-delay-3">
+                <div class="love-lang-avatar">J</div>
+                <div class="love-lang-detail">
+                    <div class="name">Jordan</div>
+                    <div class="desc">Sends long paragraphs — sometimes a whole essay at 1am. The "I miss you" person (1,890 times). Uses 3x more ❤️ than Alex. When Jordan feels something, you get the full novel.</div>
+                </div>
+            </div>
+
+            <div class="body-text anim-up-delay-4" style="opacity:0.5; font-size:0.82rem; margin-top:0.5rem;">
+                One plans. One feels. Together it works perfectly.
             </div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 8: TOP WORDS ═══ -->
-    <div class="slide bg-magenta" data-duration="7000">
-        <div class="content">
-            <div class="eyebrow anim-up">Your top words</div>
-            <div class="medium-text anim-up-delay-1">The words that defined you</div>
-            <div class="top-list">
-                <div class="top-item anim-up-delay-1">
-                    <div class="top-rank">1</div>
-                    <div class="top-info">
-                        <div class="top-title">miss</div>
-                        <div class="top-sub">1,890 times — the long-distance anthem</div>
-                    </div>
-                </div>
-                <div class="top-item anim-up-delay-2">
-                    <div class="top-rank">2</div>
-                    <div class="top-info">
-                        <div class="top-title">love</div>
-                        <div class="top-sub">1,245 times — and never enough</div>
-                    </div>
-                </div>
-                <div class="top-item anim-up-delay-3">
-                    <div class="top-rank">3</div>
-                    <div class="top-info">
-                        <div class="top-title">haha</div>
-                        <div class="top-sub">980 times — laughter across state lines</div>
-                    </div>
-                </div>
-                <div class="top-item anim-up-delay-4">
-                    <div class="top-rank">4</div>
-                    <div class="top-info">
-                        <div class="top-title">here</div>
-                        <div class="top-sub">623 times — "wish you were here"</div>
-                    </div>
-                </div>
-                <div class="top-item anim-up-delay-5">
-                    <div class="top-rank">5</div>
-                    <div class="top-info">
-                        <div class="top-title">soon</div>
-                        <div class="top-sub">412 times — the eternal promise</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ═══ SLIDE 9: TOP EMOJI ═══ -->
+    <!-- ═══ SLIDE 10: TOP EMOJI (data) ═══ -->
     <div class="slide bg-forest" data-duration="6000">
         <div class="content">
             <div class="eyebrow anim-up">Your top emoji</div>
@@ -745,40 +818,23 @@
         </div>
     </div>
 
-    <!-- ═══ SLIDE 10: TAPBACKS ═══ -->
-    <div class="slide bg-blue" data-duration="6000">
-        <div class="content">
-            <div class="eyebrow anim-up">Your tapback reactions</div>
-            <div class="medium-text anim-up-delay-1">You ❤️'d each other's texts a lot.</div>
-            <div class="bar-chart anim-up-delay-2">
-                <div class="bar-row">
-                    <div class="bar-label">❤️</div>
-                    <div class="bar-track"><div class="bar-fill" style="--bar-width:100%; background: linear-gradient(90deg, #e91e63, #f48fb1);"></div></div>
-                    <div class="bar-count">845</div>
-                </div>
-                <div class="bar-row">
-                    <div class="bar-label">😂</div>
-                    <div class="bar-track"><div class="bar-fill" style="--bar-width:48.5%; background: linear-gradient(90deg, #ffb74d, #ffd54f);"></div></div>
-                    <div class="bar-count">410</div>
-                </div>
-                <div class="bar-row">
-                    <div class="bar-label">👍</div>
-                    <div class="bar-track"><div class="bar-fill" style="--bar-width:25.8%; background: linear-gradient(90deg, #64b5f6, #90caf9);"></div></div>
-                    <div class="bar-count">218</div>
-                </div>
-                <div class="bar-row">
-                    <div class="bar-label">‼️</div>
-                    <div class="bar-track"><div class="bar-fill" style="--bar-width:14.9%; background: linear-gradient(90deg, #ce93d8, #e1bee7);"></div></div>
-                    <div class="bar-count">126</div>
-                </div>
+    <!-- ═══ SLIDE 11: WHY YOU LOVE EACH OTHER (vibes) ═══ -->
+    <div class="slide bg-rose" data-duration="8000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">In your own words</div>
+            <div class="medium-text anim-up-delay-1" style="text-align:center;">Why you love each other</div>
+            <div class="quote-bubble anim-up-delay-2">
+                <div class="qt">"I've never met someone who makes 700 miles feel like nothing. You could be on the moon and I'd still feel like you're right here."</div>
+                <div class="qa">— Jordan, September 2024</div>
             </div>
-            <div class="body-text anim-up-delay-3" style="opacity:0.5; font-size:0.85rem;">
-                845 Loved texts. When words aren't enough, a heart tapback says it all.
+            <div class="quote-bubble anim-up-delay-3" style="background:rgba(255,255,255,0.07);">
+                <div class="qt">"You're the first person I want to tell everything to. Good news, bad news, random news. You're just... my person."</div>
+                <div class="qa">— Alex, November 2024</div>
             </div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 11: PET NAMES ═══ -->
+    <!-- ═══ SLIDE 12: PET NAMES (data) ═══ -->
     <div class="slide bg-warmgold" data-duration="6000">
         <div class="content">
             <div class="eyebrow anim-up">Your pet names</div>
@@ -812,23 +868,32 @@
         </div>
     </div>
 
-    <!-- ═══ SLIDE 12: YOUR THINGS ═══ -->
-    <div class="slide bg-purple" data-duration="7000">
+    <!-- ═══ SLIDE 13: WHAT YOUR KIDS WILL BE LIKE (vibes) ═══ -->
+    <div class="slide bg-green" data-duration="7000">
         <div class="content">
-            <div class="eyebrow anim-up">Your relationship personality</div>
-            <div class="big-text anim-up-delay-1" style="font-size:clamp(1.4rem,4.5vw,2rem);">Based on your texts, you're:</div>
-            <div class="quote-bubble anim-up-delay-2">
-                <div style="font-size:1.8rem; margin-bottom:0.5rem;">🛫🌙🎧💌</div>
-                <div class="qt" style="font-style:normal; font-weight:700; font-size:1.2rem;">The "FaceTime-on-the-kitchen-counter, airport-reunion-tears, send-each-other-Spotify-links-at-2am" couple</div>
+            <div class="eyebrow anim-up">Based on your texts...</div>
+            <div class="medium-text anim-up-delay-1">What your kids will be like</div>
+            <div class="prediction-card anim-up-delay-2">
+                <div class="pred-emoji">🍕</div>
+                <div class="pred-text">Will have strong opinions about whether deep dish is "real pizza" before they can walk</div>
             </div>
-            <div class="body-text anim-up-delay-3" style="margin-top:1rem; opacity:0.7; font-size:0.9rem;">
-                They debate whether deep dish or thin crust is real pizza, fall asleep on FaceTime, and have turned airport arrivals into an Olympic sport.
+            <div class="prediction-card anim-up-delay-3">
+                <div class="pred-emoji">🌙</div>
+                <div class="pred-text">Will be night owls — there's zero chance two 11pm texters produce a morning person</div>
+            </div>
+            <div class="prediction-card anim-up-delay-4">
+                <div class="pred-emoji">✈️</div>
+                <div class="pred-text">Will know every airport lounge by name and think "landed ✈️" is a completely normal thing to text</div>
+            </div>
+            <div class="prediction-card anim-up-delay-5">
+                <div class="pred-emoji">💬</div>
+                <div class="pred-text">Will definitely learn the word "miss" before "mama" — it came up 1,890 times, after all</div>
             </div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 13: FIRST I LOVE YOU ═══ -->
-    <div class="slide bg-rose" data-duration="8000">
+    <!-- ═══ SLIDE 14: FIRST I LOVE YOU (data) ═══ -->
+    <div class="slide bg-pink" data-duration="8000">
         <div class="content" style="text-align:center;">
             <div class="eyebrow anim-up" style="text-align:center;">August 18, 2024</div>
             <div class="medium-text anim-up-delay-1" style="text-align:center;">The moment everything changed</div>
@@ -845,56 +910,41 @@
         </div>
     </div>
 
-    <!-- ═══ SLIDE 14: QUOTE – Distance ═══ -->
-    <div class="slide bg-teal" data-duration="6000">
-        <div class="content" style="text-align:center;">
-            <div class="eyebrow anim-up" style="text-align:center;">Jordan's words</div>
-            <div class="quote-bubble anim-up-delay-1">
-                <div class="qt">"I've never met someone who makes 700 miles feel like nothing. You could be on the moon and I'd still feel like you're right here."</div>
-                <div class="qa">— Jordan</div>
-            </div>
-            <div class="body-text anim-up-delay-2" style="text-align:center; margin-top:1.5rem; opacity:0.5;">
-                And later:
-            </div>
-            <div class="quote-bubble anim-up-delay-3" style="background:rgba(255,255,255,0.07);">
-                <div class="qt">"You make me feel like the distance is just a detail, not the whole story."</div>
-                <div class="qa">— Jordan</div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ═══ SLIDE 15: QUOTE – Landed Text ═══ -->
-    <div class="slide bg-sunset" data-duration="6000">
+    <!-- ═══ SLIDE 15: YOUR FUTURE TOGETHER (vibes) ═══ -->
+    <div class="slide bg-blue" data-duration="7000">
         <div class="content">
-            <div class="eyebrow anim-up">Your signature move</div>
-            <div class="medium-text anim-up-delay-1">The "landed" text</div>
-            <div class="imsg-thread anim-up-delay-2" style="margin:1.2rem 0;">
-                <div class="imsg sent" style="font-size:0.9rem;">landed ✈️</div>
-                <div class="imsg recv" style="font-size:0.9rem;">The "landed" text hits different every time</div>
-                <div class="imsg recv" style="font-size:0.9rem;">Like my whole body relaxes</div>
+            <div class="eyebrow anim-up">Your future together</div>
+            <div class="medium-text anim-up-delay-1">Based on current patterns...</div>
+            <div class="prediction-card anim-up-delay-2">
+                <div class="pred-emoji">📊</div>
+                <div class="pred-text">At 116 texts/day, you'll hit <strong>100,000 messages</strong> by November 2026</div>
             </div>
-            <div class="body-text anim-up-delay-3" style="opacity:0.6;">
-                Alex texts it the second the plane touches down. Every. Single. Time.
+            <div class="prediction-card anim-up-delay-3">
+                <div class="pred-emoji">🍕</div>
+                <div class="pred-text">You'll still be debating deep dish vs. thin crust in your 80s. Neither side will ever concede.</div>
+            </div>
+            <div class="prediction-card anim-up-delay-4">
+                <div class="pred-emoji">🛬</div>
+                <div class="pred-text">The "landed" text will still hit different even when you live in the same city — it'll just be "home ✈️" from work trips</div>
+            </div>
+            <div class="body-text anim-up-delay-5" style="opacity:0.5; font-size:0.82rem; margin-top:0.5rem;">
+                Retirement plan: same couch, FaceTime off, still saying "tell me something good" every night.
             </div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 16: QUOTE – Detail ═══ -->
-    <div class="slide bg-deep" data-duration="6000">
+    <!-- ═══ SLIDE 16: A LETTER FROM THE DATA (vibes) ═══ -->
+    <div class="slide bg-midnight" data-duration="8000">
         <div class="content" style="text-align:center;">
-            <div class="eyebrow anim-up" style="text-align:center;">What Jordan said about the distance</div>
-            <div class="quote-bubble anim-up-delay-1">
-                <div class="qt">"You make me feel like the distance is just a detail, not the whole story."</div>
-                <div class="qa">— Jordan</div>
-            </div>
-            <div class="quote-bubble anim-up-delay-2" style="background:rgba(255,255,255,0.07); margin-top:0.8rem;">
-                <div class="qt">"I'd rather have 28,000 texts with you than zero miles with anyone else."</div>
-                <div class="qa">— Jordan</div>
+            <div class="eyebrow anim-up" style="text-align:center;">A letter from the data</div>
+            <div style="font-size:2rem; margin:1rem 0;" class="anim-up-delay-1">💌</div>
+            <div class="letter-text anim-up-delay-2" style="text-align:center;">
+                In 28,412 messages, you never once went a day without saying goodnight. You said "miss" 1,890 times but never once said "give up." You sent 14 "landed" texts — and every single one meant "I chose you again today." The distance was 700 miles, but the data says you were never really apart.
             </div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 17: MILESTONES RECAP ═══ -->
+    <!-- ═══ SLIDE 17: MILESTONES (closing) ═══ -->
     <div class="slide bg-magenta" data-duration="8000">
         <div class="content">
             <div class="eyebrow anim-up">Your milestones</div>
@@ -929,29 +979,6 @@
                     </div>
                 </div>
                 <div class="top-item anim-up-delay-5">
-                    <div class="top-emoji-icon" style="font-size:1.2rem;">👨‍👩‍👧</div>
-                    <div class="top-info">
-                        <div class="top-title">Oct — Met each other's families</div>
-                        <div class="top-sub">Making it official on both sides</div>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </div>
-
-    <!-- ═══ SLIDE 18: MILESTONES PT 2 ═══ -->
-    <div class="slide bg-green" data-duration="6000">
-        <div class="content">
-            <div class="eyebrow anim-up">Your milestones (continued)</div>
-            <div class="top-list">
-                <div class="top-item anim-up-delay-1">
-                    <div class="top-emoji-icon" style="font-size:1.2rem;">🎄</div>
-                    <div class="top-info">
-                        <div class="top-title">Dec 25 — First Christmas together</div>
-                        <div class="top-sub">Same city, same couch, no FaceTime needed</div>
-                    </div>
-                </div>
-                <div class="top-item anim-up-delay-2">
                     <div class="top-emoji-icon" style="font-size:1.2rem;">💕</div>
                     <div class="top-info">
                         <div class="top-title">Feb 14 — First Valentine's Day</div>
@@ -959,19 +986,16 @@
                     </div>
                 </div>
             </div>
-            <div class="body-text anim-up-delay-3" style="margin-top:1.5rem; opacity:0.6;">
-                From strangers at table 7 to this. In 8 months.
-            </div>
         </div>
     </div>
 
-    <!-- ═══ SLIDE 19: FINALE ═══ -->
-    <div class="slide bg-finale" data-duration="10000">
+    <!-- ═══ SLIDE 18: FINALE ═══ -->
+    <div class="slide bg-finale" data-duration="999999">
         <div class="confetti-container" id="confetti"></div>
         <div class="content" style="text-align:center;">
             <div class="anim-scale" style="font-size:3rem; margin-bottom:1rem;">💕</div>
             <div class="big-text anim-up-delay-1" style="text-align:center; font-size:clamp(1.6rem,5vw,2.4rem);">
-                Happy Valentine's Day
+                Happy Valentine's Day, Jordan
             </div>
             <div class="body-text anim-up-delay-2" style="text-align:center; margin-top:1.5rem; line-height:1.8;">
                 From a friend's wedding to 28,412 messages across 700 miles.<br>
@@ -985,12 +1009,26 @@
             <div class="anim-up-delay-4" style="text-align:center; margin-top:2rem;">
                 <span style="font-family:'Dancing Script',cursive; font-size:1.6rem;">Yours, across every mile ❤️</span>
             </div>
+            <div style="margin-top:3rem; text-align:center; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.15);" class="anim-up-delay-5">
+                <button id="shareBtn" onclick="shareToGallery()" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3); color:white; padding:14px 32px; border-radius:50px; font-family:inherit; font-weight:700; font-size:0.9rem; cursor:pointer; transition:all 0.25s ease; backdrop-filter:blur(8px);">
+                    Share to Gallery 🌍
+                </button>
+                <p style="font-size:0.75rem; opacity:0.4; margin-top:8px;">Nothing is shared by default — only if you tap this button</p>
+                <div id="shareResult"></div>
+            </div>
         </div>
     </div>
 
 </div>
 
 <script>
+    const WRAPPED_META = {
+        names: "Alex & Jordan",
+        date_range: "Jun 2024 – Feb 2025",
+        emoji: "🔥",
+        gradient: "linear-gradient(135deg, #7c4dff, #1a1040)"
+    };
+
     // ── Story Engine ──
     const slides = document.querySelectorAll('.slide');
     const progressBar = document.getElementById('progressBar');
@@ -1126,6 +1164,34 @@
         h.style.animationDuration = (6 + Math.random() * 10) + 's';
         h.style.animationDelay = Math.random() * 4 + 's';
         introHearts.appendChild(h);
+    }
+
+    // Share to gallery
+    async function shareToGallery() {
+        const btn = document.getElementById('shareBtn');
+        btn.textContent = 'Sharing...';
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        try {
+            const res = await fetch('https://api.claudentines.com/upload', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...WRAPPED_META,
+                    html_content: document.documentElement.outerHTML
+                })
+            });
+            const data = await res.json();
+            const link = data.url;
+            document.getElementById('shareResult').innerHTML =
+                '<p style="margin-top:12px; font-size:0.85rem; opacity:0.7;">Listed on the gallery!</p>' +
+                '<a href="' + link + '" target="_blank" style="color:#f48fb1; font-weight:700; font-size:0.95rem; text-decoration:none;">' + link + '</a>';
+            btn.textContent = 'Listed! ✅';
+        } catch (e) {
+            btn.textContent = 'Failed — tap to retry';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        }
     }
 
     // Start

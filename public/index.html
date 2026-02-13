@@ -658,6 +658,7 @@
         <div class="prompt-header">
             <h2>Your prompt is ready ✨</h2>
             <p>Copy this and paste it into Claude Code. It'll build your entire Wrapped.</p>
+            <p style="font-size:0.8rem; opacity:0.55; margin-top:6px;">Nothing is shared by default. You'll see an option to share with others.</p>
         </div>
 
         <div class="prompt-box-wrap">
@@ -834,7 +835,7 @@ function generatePrompt(partnerName) {
     return `I want you to build a "Relationship Wrapped" — a Spotify Wrapped-style interactive story experience as a single HTML file. This is a Valentine's Day gift for my partner, ${partnerName}.
 
 STEP 1 — READ OUR IMESSAGE CONVERSATION:
-First, read our iMessage text history. The iMessage database is at ~/Library/Messages/chat.db — it's a SQLite database. Query it to find my conversation with "${partnerName}" (match on the display name or address in the 'handle' table). Extract ALL messages between us.
+First, read our iMessage text history. The iMessage database is at ~/Library/Messages/chat.db — it's a SQLite database. Query it to find my conversation with "${partnerName}". Try matching on the display name or address in the 'handle' table first. If no contact is named "${partnerName}", search through message content for me using that name (e.g. "hey ${partnerName}", "love you ${partnerName}", "miss you ${partnerName}") to identify the right conversation thread. You can also look for signals like: highest message frequency, romantic language ("love", "miss you", "babe", "baby", heart emoji), and long conversation history to identify the most likely partner conversation. Extract ALL messages between us.
 
 From the messages, compute the following statistics:
 - Total message count (and per-person breakdown)
@@ -926,6 +927,8 @@ Make it genuinely beautiful and emotional. Every slide should feel polished and 
 SHARE TO GALLERY FEATURE:
 On the finale slide (the confetti slide), AFTER the heartfelt message and signature, add a "Share to Gallery" section at the bottom. This lets the user publicly list their Wrapped on the Claudentines community gallery for others to see.
 
+IMPORTANT: The finale slide's share button and modal MUST be clickable. The left/right tap navigation zones that cover the screen for slide navigation must NOT overlay the share button area. On the finale slide, either disable the navigation tap zones entirely, or give the share section and modal a higher z-index (z-index: 9999) and add pointer-events:auto so clicks reach the buttons. The share modal must be above everything.
+
 Implementation:
 1. At the top of the <script> section, add a metadata constant:
    const WRAPPED_META = {
@@ -937,31 +940,79 @@ Implementation:
    Fill in the actual names and date range from the extracted data. Pick an emoji that fits the couple's vibe. Use the intro slide's gradient colors.
 
 2. On the finale slide, add this HTML after the signature div:
-   <div style="margin-top:3rem; text-align:center; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.15);" class="anim-up-delay-5">
-       <button id="shareBtn" onclick="shareToGallery()" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3); color:white; padding:14px 32px; border-radius:50px; font-family:inherit; font-weight:700; font-size:0.9rem; cursor:pointer; transition:all 0.25s ease; backdrop-filter:blur(8px);">
+   <div style="margin-top:3rem; text-align:center; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.15); position:relative; z-index:9999;" class="anim-up-delay-5">
+       <button id="shareBtn" onclick="openShareModal()" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3); color:white; padding:14px 32px; border-radius:50px; font-family:inherit; font-weight:700; font-size:0.9rem; cursor:pointer; transition:all 0.25s ease; backdrop-filter:blur(8px); position:relative; z-index:9999;">
            Share to Gallery 🌍
        </button>
-       <p style="font-size:0.75rem; opacity:0.4; margin-top:8px;">List your Wrapped on the Claudentines gallery for others to see</p>
+       <p style="font-size:0.75rem; opacity:0.4; margin-top:8px;">Nothing is shared by default — only if you tap this button</p>
        <div id="shareResult"></div>
    </div>
 
-3. Add this JavaScript function:
-   async function shareToGallery() {
+3. Add a share consent modal as a direct child of <body> (NOT inside any slide). Style it as a centered overlay:
+   <div id="shareModal" style="display:none; position:fixed; top:0; left:0; right:0; bottom:0; z-index:99999; background:rgba(0,0,0,0.7); backdrop-filter:blur(8px); align-items:center; justify-content:center; padding:24px;">
+       <div style="background:#1a1a2e; border:1px solid rgba(255,255,255,0.15); border-radius:20px; padding:32px; max-width:420px; width:100%; text-align:center; color:white; font-family:inherit; position:relative;">
+           <button onclick="closeShareModal()" style="position:absolute; top:12px; right:16px; background:none; border:none; color:rgba(255,255,255,0.5); font-size:1.5rem; cursor:pointer; line-height:1;">&times;</button>
+           <h3 style="font-size:1.3rem; font-weight:800; margin-bottom:8px;">Share to Gallery</h3>
+           <p style="font-size:0.85rem; opacity:0.7; line-height:1.6; margin-bottom:20px;">This will publicly list your Wrapped on the Claudentines community gallery. The following will be shared:</p>
+           <div style="background:rgba(255,255,255,0.08); border-radius:12px; padding:16px; margin-bottom:20px; text-align:left; font-size:0.85rem; line-height:1.8;">
+               <div>Your names: <strong id="modalNames"></strong></div>
+               <div>Date range: <strong id="modalDateRange"></strong></div>
+               <div>Your full Wrapped experience (all slides)</div>
+           </div>
+           <label style="display:flex; align-items:center; justify-content:center; gap:10px; margin-bottom:24px; cursor:pointer; font-size:0.88rem;">
+               <input type="checkbox" id="anonymizeCheck" style="width:18px; height:18px; accent-color:#f74c89; cursor:pointer;">
+               Anonymize our names
+           </label>
+           <button onclick="confirmShare()" style="background:linear-gradient(135deg, #f74c89, #e81b5b); border:none; color:white; padding:14px 36px; border-radius:50px; font-family:inherit; font-weight:700; font-size:0.95rem; cursor:pointer; width:100%; transition:all 0.25s ease;">
+               Share Wrapped
+           </button>
+           <p style="font-size:0.7rem; opacity:0.35; margin-top:12px;">You can request removal anytime</p>
+       </div>
+   </div>
+
+4. Add these JavaScript functions:
+   function openShareModal() {
+       const modal = document.getElementById('shareModal');
+       document.getElementById('modalNames').textContent = WRAPPED_META.names;
+       document.getElementById('modalDateRange').textContent = WRAPPED_META.date_range;
+       document.getElementById('anonymizeCheck').checked = false;
+       modal.style.display = 'flex';
+   }
+
+   function closeShareModal() {
+       document.getElementById('shareModal').style.display = 'none';
+   }
+
+   // Close modal when clicking the backdrop
+   document.getElementById('shareModal').addEventListener('click', function(e) {
+       if (e.target === this) closeShareModal();
+   });
+
+   async function confirmShare() {
+       const modal = document.getElementById('shareModal');
+       const anonymize = document.getElementById('anonymizeCheck').checked;
+       const meta = { ...WRAPPED_META };
+       if (anonymize) {
+           meta.names = 'Anonymous Couple';
+       }
        const btn = document.getElementById('shareBtn');
+       closeShareModal();
        btn.textContent = 'Sharing...';
        btn.disabled = true;
        btn.style.opacity = '0.5';
        try {
-           const res = await fetch('${SERVER_URL}/api/wrappeds', {
+           const res = await fetch('https://claudentines.ai/wrappeds', {
                method: 'POST',
                headers: { 'Content-Type': 'application/json' },
                body: JSON.stringify({
-                   ...WRAPPED_META,
-                   html_content: document.documentElement.outerHTML
+                   ...meta,
+                   html_content: anonymize
+                       ? document.documentElement.outerHTML.replace(new RegExp(WRAPPED_META.names.split(' & ')[0], 'g'), 'Partner A').replace(new RegExp(WRAPPED_META.names.split(' & ')[1], 'g'), 'Partner B')
+                       : document.documentElement.outerHTML
                })
            });
            const data = await res.json();
-           const link = '${SERVER_URL}' + data.url;
+           const link = 'https://claudentines.ai/wrappeds' + data.url;
            document.getElementById('shareResult').innerHTML =
                '<p style="margin-top:12px; font-size:0.85rem; opacity:0.7;">Listed on the gallery!</p>' +
                '<a href="' + link + '" target="_blank" style="color:#f48fb1; font-weight:700; font-size:0.95rem; text-decoration:none;">' + link + '</a>';
@@ -999,7 +1050,7 @@ function showToast(msg) {
 }
 
 // ── Server URL (update this when deploying) ──
-const SERVER_URL = window.location.origin;
+const SERVER_URL = 'https://claudentines.ai';
 
 // ── Gallery ──
 function renderGallery(containerId, items) {
@@ -1019,7 +1070,7 @@ function renderGallery(containerId, items) {
 
 async function loadGallery() {
     try {
-        const res = await fetch(SERVER_URL + '/api/wrappeds');
+        const res = await fetch('/api/wrappeds');
         const items = await res.json();
         renderGallery('galleryGrid', items);
         renderGallery('galleryGrid2', items);
