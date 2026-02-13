@@ -35,9 +35,9 @@ const samples = [
   }
 ];
 
-function seedDatabase() {
+async function seedDatabase() {
   for (const sample of samples) {
-    upsertSample(sample);
+    await upsertSample(sample);
   }
   console.log(`Seeded ${samples.length} sample wrappeds`);
 }
