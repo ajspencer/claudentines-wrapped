@@ -4,7 +4,8 @@ const path = require('path');
 const crypto = require('crypto');
 const {
   initDb, getPublicWrappeds, getWrappedById, createWrapped,
-  getAllWrappedsAdmin, deleteWrapped, setWrappedVisibility
+  getAllWrappedsAdmin, deleteWrapped, setWrappedVisibility,
+  recordPromptEvent, getPromptEventCount
 } = require('./db');
 const { seedDatabase } = require('./seed');
 
@@ -96,6 +97,18 @@ app.get('/w/:id', async (req, res) => {
   }
 });
 
+// Track prompt generation
+app.post('/api/prompt-generated', async (req, res) => {
+  try {
+    const includeShare = req.body.include_share !== false;
+    await recordPromptEvent(includeShare);
+    res.json({ ok: true });
+  } catch (err) {
+    console.error('Error recording prompt event:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
+});
+
 // Submit a new wrapped
 app.post('/api/wrappeds', async (req, res) => {
   try {
@@ -153,6 +166,17 @@ app.post('/admin/logout', (req, res) => {
 // Check if admin is authenticated
 app.get('/admin/api/check', requireAdmin, (req, res) => {
   res.json({ authenticated: true });
+});
+
+// Get prompt generation count
+app.get('/admin/api/prompt-count', requireAdmin, async (req, res) => {
+  try {
+    const count = await getPromptEventCount();
+    res.json({ count });
+  } catch (err) {
+    console.error('Admin prompt count error:', err);
+    res.status(500).json({ error: 'Internal server error' });
+  }
 });
 
 // List all wrappeds (admin view — includes private, sizes, etc.)

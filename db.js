@@ -31,6 +31,14 @@ async function initDb() {
     EXCEPTION WHEN duplicate_column THEN NULL;
     END $$;
   `);
+
+  await pool.query(`
+    CREATE TABLE IF NOT EXISTS prompt_events (
+      id SERIAL PRIMARY KEY,
+      include_share BOOLEAN DEFAULT true,
+      created_at TIMESTAMPTZ DEFAULT NOW()
+    )
+  `);
 }
 
 function generateId() {
@@ -99,6 +107,18 @@ async function setWrappedVisibility(id, isPublic) {
   return rowCount > 0;
 }
 
+async function recordPromptEvent(includeShare) {
+  await pool.query(
+    'INSERT INTO prompt_events (include_share) VALUES ($1)',
+    [includeShare]
+  );
+}
+
+async function getPromptEventCount() {
+  const { rows } = await pool.query('SELECT COUNT(*)::int AS count FROM prompt_events');
+  return rows[0].count;
+}
+
 module.exports = {
   initDb,
   getPublicWrappeds,
@@ -107,5 +127,7 @@ module.exports = {
   upsertSample,
   getAllWrappedsAdmin,
   deleteWrapped,
-  setWrappedVisibility
+  setWrappedVisibility,
+  recordPromptEvent,
+  getPromptEventCount
 };

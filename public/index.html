@@ -965,6 +965,13 @@ function generateAndShow() {
     const prompt = generatePrompt(name, includeShare);
     document.getElementById('promptOutput').textContent = prompt;
     showScreen(3);
+
+    // Track prompt generation (fire and forget)
+    fetch('/api/prompt-generated', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ include_share: includeShare })
+    }).catch(() => {});
 }
 
 function onShareToggle() {

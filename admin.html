@@ -401,6 +401,10 @@
                 <div class="label">User Submitted</div>
                 <div class="value" id="statUser">—</div>
             </div>
+            <div class="stat-card">
+                <div class="label">Prompts Generated</div>
+                <div class="value" id="statPrompts">—</div>
+            </div>
         </div>
 
         <div class="table-wrap">
@@ -481,6 +485,7 @@ function showDashboard() {
     document.getElementById('loginScreen').style.display = 'none';
     document.getElementById('dashboard').style.display = 'block';
     loadWrappeds();
+    loadPromptCount();
 }
 
 // ── Data ──
@@ -496,6 +501,18 @@ async function loadWrappeds() {
         renderTable();
     } catch (err) {
         console.error('Failed to load:', err);
+    }
+}
+
+async function loadPromptCount() {
+    try {
+        const res = await fetch('/admin/api/prompt-count');
+        if (res.ok) {
+            const { count } = await res.json();
+            document.getElementById('statPrompts').textContent = count;
+        }
+    } catch (err) {
+        console.error('Failed to load prompt count:', err);
     }
 }
 
