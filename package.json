@@ -1,0 +1,13 @@
+{
+  "name": "claudentines",
+  "version": "1.0.0",
+  "description": "Claudentines Wrapped - Valentine's relationship wrapped generator",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js"
+  },
+  "dependencies": {
+    "express": "^4.21.0",
+    "better-sqlite3": "^11.7.0"
+  }
+}

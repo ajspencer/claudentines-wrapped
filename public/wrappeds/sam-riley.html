@@ -1,0 +1,1119 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Claudentines Wrapped 2025</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Dancing+Script:wght@700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #121212;
+            --white: #ffffff;
+            --green: #1DB954;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        /* ── Story Container ── */
+        .story-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* ── Progress Bar ── */
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 4px;
+            padding: 12px 12px 0;
+            z-index: 100;
+        }
+
+        .progress-segment {
+            flex: 1;
+            height: 3px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-segment .fill {
+            height: 100%;
+            width: 0%;
+            background: white;
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-segment.complete .fill { width: 100%; }
+        .progress-segment.active .fill { width: 0%; }
+
+        /* ── Navigation Zones ── */
+        .nav-left, .nav-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 35%;
+            z-index: 50;
+            cursor: pointer;
+        }
+        .nav-left { left: 0; }
+        .nav-right { right: 0; width: 65%; }
+
+        /* ── Slide Base ── */
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 32px 40px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            overflow: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .slide .content {
+            max-width: 420px;
+            width: 100%;
+            text-align: left;
+        }
+
+        /* ── Typography ── */
+        .slide .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 1.2rem;
+        }
+
+        .slide .big-number {
+            font-size: clamp(4rem, 15vw, 8rem);
+            font-weight: 900;
+            line-height: 0.95;
+            margin-bottom: 0.5rem;
+            letter-spacing: -3px;
+        }
+
+        .slide .big-text {
+            font-size: clamp(2.2rem, 7vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .slide .medium-text {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.8rem;
+        }
+
+        .slide .body-text {
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            font-weight: 400;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .slide .small-text {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-top: 0.5rem;
+        }
+
+        .slide .accent {
+            color: var(--accent, #1DB954);
+        }
+
+        /* ── Animations ── */
+        .slide.active .anim-up {
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        .slide.active .anim-up-delay-1 { animation: slideUp 0.6s ease 0.15s forwards; opacity: 0; }
+        .slide.active .anim-up-delay-2 { animation: slideUp 0.6s ease 0.3s forwards; opacity: 0; }
+        .slide.active .anim-up-delay-3 { animation: slideUp 0.6s ease 0.45s forwards; opacity: 0; }
+        .slide.active .anim-up-delay-4 { animation: slideUp 0.6s ease 0.6s forwards; opacity: 0; }
+        .slide.active .anim-up-delay-5 { animation: slideUp 0.6s ease 0.75s forwards; opacity: 0; }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .slide.active .anim-scale {
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+            opacity: 0;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .slide.active .anim-count { animation: countPulse 0.4s ease 0.2s forwards; opacity: 0; }
+
+        @keyframes countPulse {
+            0% { transform: scale(0.7); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ── Specific Slide Styles ── */
+
+        /* Bar chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 1.5rem 0;
+            width: 100%;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            width: 36px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 28px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .slide.active .bar-fill {
+            width: var(--bar-width);
+        }
+
+        .bar-count {
+            font-size: 0.75rem;
+            font-weight: 700;
+            width: 48px;
+            opacity: 0.7;
+        }
+
+        /* Top list */
+        .top-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 1.5rem 0;
+        }
+
+        .top-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .top-rank {
+            font-size: 1.8rem;
+            font-weight: 900;
+            opacity: 0.3;
+            width: 36px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .top-info {
+            flex: 1;
+        }
+
+        .top-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .top-sub {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-top: 2px;
+        }
+
+        .top-emoji-icon {
+            font-size: 2rem;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Quote card */
+        .quote-bubble {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .quote-bubble .qt {
+            font-size: 1.05rem;
+            font-weight: 500;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .quote-bubble .qa {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* iMessage recreation */
+        .imsg-thread {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .imsg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.45;
+        }
+
+        .imsg.sent {
+            align-self: flex-end;
+            background: #007AFF;
+            border-bottom-right-radius: 5px;
+        }
+
+        .imsg.recv {
+            align-self: flex-start;
+            background: rgba(255,255,255,0.15);
+            border-bottom-left-radius: 5px;
+        }
+
+        .imsg-time {
+            text-align: center;
+            font-size: 0.7rem;
+            opacity: 0.4;
+            margin: 6px 0;
+        }
+
+        /* Clock visualization */
+        .clock-ring {
+            width: 220px;
+            height: 220px;
+            margin: 1.5rem auto;
+            position: relative;
+        }
+
+        .clock-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .clock-center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .clock-center-text .peak {
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .clock-center-text .peak-label {
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+
+        /* Streak fire */
+        .streak-number {
+            font-size: clamp(5rem, 18vw, 10rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -4px;
+        }
+
+        /* CTA at bottom */
+        .slide-cta {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 0.4;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Intro hearts */
+        .intro-hearts {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .intro-heart {
+            position: absolute;
+            opacity: 0;
+            font-size: 24px;
+        }
+
+        .slide.active .intro-heart {
+            animation: introFloat linear infinite;
+        }
+
+        @keyframes introFloat {
+            0% { transform: translateY(100vh) scale(0.6) rotate(0deg); opacity: 0; }
+            8% { opacity: 0.8; }
+            85% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(30deg); opacity: 0; }
+        }
+
+        .intro-pulse-heart {
+            font-size: clamp(5rem, 16vw, 9rem);
+            animation: bigPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(255,100,150,0.6));
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes bigPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 40px rgba(255,100,150,0.6)); }
+            5% { transform: scale(1.15); filter: drop-shadow(0 0 60px rgba(255,100,150,0.8)); }
+            10% { transform: scale(1); }
+            15% { transform: scale(1.1); filter: drop-shadow(0 0 50px rgba(255,100,150,0.7)); }
+            20% { transform: scale(1); }
+        }
+
+        .intro-title {
+            font-size: clamp(2.2rem, 7vw, 3.8rem) !important;
+            font-weight: 900 !important;
+            line-height: 1.05 !important;
+            letter-spacing: -2px;
+            background: linear-gradient(180deg, #fff 30%, #a5f5dc 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-subtitle {
+            font-size: clamp(1rem, 3vw, 1.4rem) !important;
+            font-weight: 600 !important;
+            letter-spacing: 4px !important;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-top: 0.8rem;
+        }
+
+        /* Gradient backgrounds */
+        .bg-intro { background: linear-gradient(150deg, #880e4f 0%, #e91e63 35%, #ff4081 60%, #f50057 100%); }
+        .bg-green { background: linear-gradient(150deg, #1a3a2a 0%, #1DB954 100%); }
+        .bg-pink { background: linear-gradient(150deg, #4a1942 0%, #e91e63 100%); }
+        .bg-orange { background: linear-gradient(150deg, #4a2c1a 0%, #e65100 70%, #ff8f00 100%); }
+        .bg-purple { background: linear-gradient(150deg, #1a1040 0%, #7c4dff 100%); }
+        .bg-teal { background: linear-gradient(150deg, #0d3b3b 0%, #00bfa5 100%); }
+        .bg-coral { background: linear-gradient(150deg, #4a1a2e 0%, #ff6b6b 100%); }
+        .bg-blue { background: linear-gradient(150deg, #0d1b3e 0%, #2979ff 100%); }
+        .bg-magenta { background: linear-gradient(150deg, #3e0d2e 0%, #d500f9 100%); }
+        .bg-sunset { background: linear-gradient(150deg, #4a1a0d 0%, #ff5722 50%, #ff9800 100%); }
+        .bg-deep { background: linear-gradient(150deg, #0a0a1a 0%, #1a237e 50%, #283593 100%); }
+        .bg-rose { background: linear-gradient(150deg, #3e1a2e 0%, #e91e63 50%, #f48fb1 100%); }
+        .bg-forest { background: linear-gradient(150deg, #0d2818 0%, #2e7d32 100%); }
+        .bg-warmgold { background: linear-gradient(150deg, #3e2a0d 0%, #f9a825 100%); }
+        .bg-finale { background: linear-gradient(150deg, #880e4f 0%, #e91e63 40%, #f06292 100%); }
+
+        /* Confetti */
+        .confetti-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+
+        .slide.active .confetti-piece {
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="story-container" id="stories">
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Nav zones -->
+    <div class="nav-left" id="navLeft"></div>
+    <div class="nav-right" id="navRight"></div>
+
+    <!-- ═══ SLIDE 0: INTRO ═══ -->
+    <div class="slide bg-forest" data-duration="999999">
+        <div class="intro-hearts" id="introHearts"></div>
+        <div class="content" style="text-align:center; position:relative; z-index:2; max-width:600px;">
+            <div class="intro-pulse-heart anim-scale">🏔️</div>
+            <div class="intro-title anim-up-delay-1" style="text-align:center;">Claudentines<br>Wrapped</div>
+            <div class="intro-subtitle anim-up-delay-2" style="text-align:center;">Our first 11 months</div>
+            <div class="small-text anim-up-delay-3" style="text-align:center; margin-top:2.5rem; letter-spacing:2px;">Tap to begin →</div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 1: TOTAL MESSAGES ═══ -->
+    <div class="slide bg-teal" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Since March 8</div>
+            <div class="body-text anim-up-delay-1">You two exchanged</div>
+            <div class="big-number anim-count" style="--accent:#00bfa5;">18,732</div>
+            <div class="big-text anim-up-delay-2" style="font-size:clamp(1.4rem,4vw,2rem);">messages.</div>
+            <div class="body-text anim-up-delay-3" style="margin-top:1rem;">
+                That's roughly <strong>56 texts a day.</strong><br>
+                Every single day since you met on that trail.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 2: THE BEGINNING ═══ -->
+    <div class="slide bg-green" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Where it started</div>
+            <div class="big-text anim-up-delay-1" style="font-size:clamp(1.5rem,5vw,2.2rem);">One cliff.<br>One stumble.<br>One trail.</div>
+            <div class="imsg-thread anim-up-delay-2">
+                <div class="imsg sent">Hey! I'm the person who almost knocked you off the cliff at Eagle Peak today 😅 Thanks for not pushing me off in revenge</div>
+                <div class="imsg recv">Hahaha omg I was hoping you'd text! That was the best trail conversation I've ever had. Same trail next Saturday?</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.6;">March 8, 2025</div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 3: FIRST DATE ═══ -->
+    <div class="slide bg-sunset" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">March 15, 2025</div>
+            <div class="big-text anim-up-delay-1">Your first real hike-date.</div>
+            <div class="body-text anim-up-delay-2" style="margin-top:1rem;">
+                Same trail. On purpose this time. What was supposed to be a 2-hour loop turned into 5 hours, a wrong turn, a shared granola bar, and a sunset neither of them planned to see together.
+            </div>
+            <div class="body-text anim-up-delay-3" style="margin-top:1rem; opacity:0.6;">
+                They haven't missed a Saturday hike since.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 4: STREAK ═══ -->
+    <div class="slide bg-coral" data-duration="5000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">Your texting streak</div>
+            <div class="streak-number anim-scale" style="text-align:center;">🔥 334</div>
+            <div class="big-text anim-up-delay-2" style="text-align:center; font-size:clamp(1.3rem,4vw,1.8rem);">consecutive days</div>
+            <div class="body-text anim-up-delay-3" style="text-align:center; margin-top:1rem;">
+                You haven't missed a single day since March 8th.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 5: MONTHLY BREAKDOWN ═══ -->
+    <div class="slide bg-deep" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Messages by month</div>
+            <div class="medium-text anim-up-delay-1">June was your<br>most active month.</div>
+            <div class="bar-chart anim-up-delay-2">
+                <div class="bar-row">
+                    <div class="bar-label">Mar</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:57.7%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,240</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Apr</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:78.1%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,680</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">May</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:89.3%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,920</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Jun</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:100%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">2,150</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Jul</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:87.0%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,870</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Aug</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:76.5%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,645</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Sep</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:73.5%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,580</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Oct</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:87.9%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,890</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Nov</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:81.2%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,745</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Dec</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:70.7%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,520</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Jan</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:59.5%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">1,280</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Feb</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:9.9%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">212</div>
+                </div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.6; font-size:0.85rem;">2,150 messages in June alone. That's the summer-adventure-planning explosion.</div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 6: PEAK HOURS ═══ -->
+    <div class="slide bg-purple" data-duration="6000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">Your peak texting hour</div>
+            <div class="big-number anim-scale" style="text-align:center; font-size:clamp(4rem,14vw,7rem);">7 PM</div>
+            <div class="medium-text anim-up-delay-2" style="text-align:center;">1,420 messages sent between 7-8pm</div>
+            <div class="body-text anim-up-delay-3" style="text-align:center; margin-top:1rem; opacity:0.6;">
+                Right after sunset on the trail...<br>or right after dinner prep starts.
+            </div>
+            <div class="body-text anim-up-delay-4" style="text-align:center; margin-top:0.5rem; opacity:0.4; font-size:0.85rem;">
+                You're golden-hour people.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 7: BUSIEST DAY ═══ -->
+    <div class="slide bg-orange" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your biggest texting day</div>
+            <div class="big-text anim-up-delay-1">June 21</div>
+            <div class="big-number anim-count" style="font-size:clamp(3rem,12vw,6rem);">438</div>
+            <div class="body-text anim-up-delay-2">messages in one day.</div>
+            <div class="body-text anim-up-delay-3" style="margin-top:1rem; opacity:0.7;">
+                Summer solstice. The longest day of the year became the longest conversation of the year. You planned your first camping trip that day.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 8: TOP WORDS ═══ -->
+    <div class="slide bg-forest" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your top words</div>
+            <div class="medium-text anim-up-delay-1">The words that defined you</div>
+            <div class="top-list">
+                <div class="top-item anim-up-delay-1">
+                    <div class="top-rank">1</div>
+                    <div class="top-info">
+                        <div class="top-title">food</div>
+                        <div class="top-sub">823 times — the true love language</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-2">
+                    <div class="top-rank">2</div>
+                    <div class="top-info">
+                        <div class="top-title">hike</div>
+                        <div class="top-sub">612 times — where it all started</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-3">
+                    <div class="top-rank">3</div>
+                    <div class="top-info">
+                        <div class="top-title">love</div>
+                        <div class="top-sub">589 times — and meaning it every time</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-4">
+                    <div class="top-rank">4</div>
+                    <div class="top-info">
+                        <div class="top-title">home</div>
+                        <div class="top-sub">387 times — wherever you both are</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-5">
+                    <div class="top-rank">5</div>
+                    <div class="top-info">
+                        <div class="top-title">cook</div>
+                        <div class="top-sub">294 times — never once ordered delivery</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 9: TOP EMOJI ═══ -->
+    <div class="slide bg-teal" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your top emoji</div>
+            <div class="medium-text anim-up-delay-1">Expressed without words</div>
+            <div class="top-list">
+                <div class="top-item anim-up-delay-1">
+                    <div class="top-emoji-icon">🏔️</div>
+                    <div class="top-info">
+                        <div class="top-title">🏔️ × 156</div>
+                        <div class="top-sub">Your signature — always another summit</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-2">
+                    <div class="top-emoji-icon">😍</div>
+                    <div class="top-info">
+                        <div class="top-title">😍 × 142</div>
+                        <div class="top-sub">Heart-eyes for days</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-3">
+                    <div class="top-emoji-icon">🍕</div>
+                    <div class="top-info">
+                        <div class="top-title">🍕 × 98</div>
+                        <div class="top-sub">The one exception to cooking from scratch</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-4">
+                    <div class="top-emoji-icon">🌅</div>
+                    <div class="top-info">
+                        <div class="top-title">🌅 × 76</div>
+                        <div class="top-sub">Every morning, without fail</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 10: TAPBACKS ═══ -->
+    <div class="slide bg-blue" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your tapback reactions</div>
+            <div class="medium-text anim-up-delay-1">You ❤️'d each other's texts a lot.</div>
+            <div class="bar-chart anim-up-delay-2">
+                <div class="bar-row">
+                    <div class="bar-label">❤️</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:100%; background: linear-gradient(90deg, #e91e63, #f48fb1);"></div></div>
+                    <div class="bar-count">623</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">😂</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:55.4%; background: linear-gradient(90deg, #ffb74d, #ffd54f);"></div></div>
+                    <div class="bar-count">345</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">👍</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:42.9%; background: linear-gradient(90deg, #64b5f6, #90caf9);"></div></div>
+                    <div class="bar-count">267</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">‼️</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:14.3%; background: linear-gradient(90deg, #ce93d8, #e1bee7);"></div></div>
+                    <div class="bar-count">89</div>
+                </div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.5; font-size:0.85rem;">
+                623 Loved texts. That's the real love language.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 11: PET NAMES ═══ -->
+    <div class="slide bg-warmgold" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your pet names</div>
+            <div class="big-text anim-up-delay-1" style="font-size:clamp(1.5rem,5vw,2.2rem);">What you call each other</div>
+            <div class="top-list">
+                <div class="top-item anim-up-delay-2">
+                    <div class="top-rank" style="opacity:0.7; font-size:1.2rem;">💛</div>
+                    <div class="top-info">
+                        <div class="top-title">honey</div>
+                        <div class="top-sub">178 times — sweet and steady</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-3">
+                    <div class="top-rank" style="opacity:0.7; font-size:1.2rem;">💛</div>
+                    <div class="top-info">
+                        <div class="top-title">bub</div>
+                        <div class="top-sub">134 times — the trail name that stuck</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-4">
+                    <div class="top-rank" style="opacity:0.7; font-size:1.2rem;">💛</div>
+                    <div class="top-info">
+                        <div class="top-title">love</div>
+                        <div class="top-sub">96 times — because they are</div>
+                    </div>
+                </div>
+            </div>
+            <div class="body-text anim-up-delay-5" style="opacity:0.6; font-size:0.85rem; margin-top:0.5rem;">
+                408 total pet names. That's more than one a day.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 12: YOUR THINGS ═══ -->
+    <div class="slide bg-green" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your relationship personality</div>
+            <div class="big-text anim-up-delay-1" style="font-size:clamp(1.4rem,4.5vw,2rem);">Based on your texts, you're:</div>
+            <div class="quote-bubble anim-up-delay-2">
+                <div style="font-size:1.8rem; margin-bottom:0.5rem;">🏔️🍳🌿🏕️</div>
+                <div class="qt" style="font-style:normal; font-weight:700; font-size:1.2rem;">The "sunrise-alarm-at-5am, farmers-market-every-Saturday, cook-together-with-wine" couple</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="margin-top:1rem; opacity:0.7; font-size:0.9rem;">
+                They have a running list of trails to conquer, a shared recipe folder with 47 entries, and have never once ordered delivery when they could cook instead. Their idea of a perfect date is a 6-hour hike followed by homemade ramen.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 13: FIRST I LOVE YOU ═══ -->
+    <div class="slide bg-rose" data-duration="8000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">July 14, 2025</div>
+            <div class="medium-text anim-up-delay-1" style="text-align:center;">The moment everything changed</div>
+            <div class="imsg-thread anim-up-delay-2" style="margin:1.5rem 0;">
+                <div class="imsg recv">I think I'm in love with you. Actually I know I am. I knew it when you made me that pasta at 2am after the Rainier hike</div>
+                <div class="imsg sent">I've been in love with you since Eagle Peak honestly</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="text-align:center; opacity:0.7;">
+                128 days after your first text.<br>Your first "I love you."
+            </div>
+            <div class="body-text anim-up-delay-4" style="text-align:center; margin-top:1rem; opacity:0.5; font-size:0.85rem;">
+                One fell in love on a mountain. The other fell in love over 2am pasta. Both were right.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 14: QUOTE – Trail Mix ═══ -->
+    <div class="slide bg-teal" data-duration="6000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">Riley's words</div>
+            <div class="quote-bubble anim-up-delay-1">
+                <div class="qt">"You're the only person I'd share my summit snacks with. And I'm VERY serious about my trail mix."</div>
+                <div class="qa">— Riley</div>
+            </div>
+            <div class="body-text anim-up-delay-2" style="text-align:center; margin-top:1.5rem; opacity:0.5;">
+                For the record, Riley's trail mix has almonds, dark chocolate chips, dried mango, and exactly zero raisins. Sharing it is basically a marriage proposal.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 15: QUOTE – Sunrise Photos ═══ -->
+    <div class="slide bg-sunset" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your signature move</div>
+            <div class="medium-text anim-up-delay-1">Sam's sunrise photos — every single morning</div>
+            <div class="imsg-thread anim-up-delay-2" style="margin:1.2rem 0;">
+                <div class="imsg recv" style="font-size:0.9rem;">Got my sunrise 🌅</div>
+                <div class="imsg sent" style="font-size:0.9rem;">Wouldn't miss it</div>
+                <div class="imsg recv" style="font-size:0.9rem;">It's literally my favorite part of waking up</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.6;">
+                334 days. 334 sunrises. Not one missed.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 16: QUOTE – Every Trail ═══ -->
+    <div class="slide bg-deep" data-duration="6000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">What Sam said</div>
+            <div class="quote-bubble anim-up-delay-1">
+                <div class="qt">"Every trail is better because you're on it. Even the ones where it rains the whole time and we're miserable. Especially those actually."</div>
+                <div class="qa">— Sam</div>
+            </div>
+            <div class="quote-bubble anim-up-delay-2" style="background:rgba(255,255,255,0.07); margin-top:0.8rem;">
+                <div class="qt">"I don't need the summit to be worth it. I just need you at the trailhead."</div>
+                <div class="qa">— Sam</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 17: MILESTONES RECAP ═══ -->
+    <div class="slide bg-magenta" data-duration="8000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your milestones</div>
+            <div class="medium-text anim-up-delay-1" style="margin-bottom:1.2rem;">What a ride so far.</div>
+            <div class="top-list">
+                <div class="top-item anim-up-delay-1">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">🥾</div>
+                    <div class="top-info">
+                        <div class="top-title">Mar 8 — First text</div>
+                        <div class="top-sub">The day after Eagle Peak (and the near-death experience)</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-2">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">🏔️</div>
+                    <div class="top-info">
+                        <div class="top-title">Mar 15 — First hike-date</div>
+                        <div class="top-sub">Same trail, on purpose this time</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-3">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">🏕️</div>
+                    <div class="top-info">
+                        <div class="top-title">Jul 4 — First camping trip</div>
+                        <div class="top-sub">Olympic National Park</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-4">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">❤️</div>
+                    <div class="top-info">
+                        <div class="top-title">Jul 14 — First "I love you"</div>
+                        <div class="top-sub">After the Rainier hike and 2am pasta</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-5">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">🏠</div>
+                    <div class="top-info">
+                        <div class="top-title">Nov — Moved in together</div>
+                        <div class="top-sub">Same kitchen, same sunrise view, same life</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 18: FINALE ═══ -->
+    <div class="slide bg-forest" data-duration="10000">
+        <div class="confetti-container" id="confetti"></div>
+        <div class="content" style="text-align:center;">
+            <div class="anim-scale" style="font-size:3rem; margin-bottom:1rem;">🏔️</div>
+            <div class="big-text anim-up-delay-1" style="text-align:center; font-size:clamp(1.6rem,5vw,2.4rem);">
+                Happy Valentine's Day
+            </div>
+            <div class="body-text anim-up-delay-2" style="text-align:center; margin-top:1.5rem; line-height:1.8;">
+                From almost falling off a cliff to 18,732 messages.<br>
+                From "same trail Saturday?" to "same life forever."<br>
+                From strangers at Eagle Peak to my favorite adventure partner.
+            </div>
+            <div class="body-text anim-up-delay-3" style="text-align:center; margin-top:1.5rem; opacity:0.7;">
+                Here's to every summit, sunset, and homemade meal still ahead.<br>
+                And the trails we haven't found yet.
+            </div>
+            <div class="anim-up-delay-4" style="text-align:center; margin-top:2rem;">
+                <span style="font-family:'Dancing Script',cursive; font-size:1.6rem;">Yours, from trailhead to forever 🏔️</span>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ── Story Engine ──
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    let current = 0;
+    let timer = null;
+    let startTime = 0;
+    let elapsed = 0;
+    let paused = false;
+
+    // Build progress bar
+    slides.forEach((_, i) => {
+        const seg = document.createElement('div');
+        seg.className = 'progress-segment';
+        seg.innerHTML = '<div class="fill"></div>';
+        progressBar.appendChild(seg);
+    });
+
+    const segments = document.querySelectorAll('.progress-segment');
+
+    function goTo(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        // Clear timer
+        if (timer) cancelAnimationFrame(timer);
+
+        // Update slides
+        slides[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+
+        // Update progress
+        segments.forEach((seg, i) => {
+            seg.classList.remove('active', 'complete');
+            seg.querySelector('.fill').style.width = '0%';
+            if (i < current) {
+                seg.classList.add('complete');
+                seg.querySelector('.fill').style.width = '100%';
+            }
+        });
+        segments[current].classList.add('active');
+
+        // Trigger confetti on last slide
+        if (current === slides.length - 1) spawnConfetti();
+
+        // Start timer
+        elapsed = 0;
+        startTime = performance.now();
+        startProgress();
+    }
+
+    function startProgress() {
+        const duration = parseInt(slides[current].dataset.duration) || 6000;
+        const fill = segments[current].querySelector('.fill');
+
+        function tick(now) {
+            if (paused) { timer = requestAnimationFrame(tick); return; }
+            const dt = now - startTime;
+            elapsed = dt;
+            const pct = Math.min((dt / duration) * 100, 100);
+            fill.style.width = pct + '%';
+
+            if (pct >= 100) {
+                if (current < slides.length - 1) {
+                    goTo(current + 1);
+                }
+                return;
+            }
+            timer = requestAnimationFrame(tick);
+        }
+        timer = requestAnimationFrame(tick);
+    }
+
+    // Navigation
+    document.getElementById('navLeft').addEventListener('click', (e) => {
+        e.stopPropagation();
+        goTo(current - 1);
+    });
+
+    document.getElementById('navRight').addEventListener('click', (e) => {
+        e.stopPropagation();
+        goTo(current + 1);
+    });
+
+    // Touch hold to pause
+    let holdTimer = null;
+    document.addEventListener('touchstart', () => {
+        holdTimer = setTimeout(() => { paused = true; }, 200);
+    });
+    document.addEventListener('touchend', () => {
+        clearTimeout(holdTimer);
+        if (paused) {
+            paused = false;
+            startTime = performance.now() - elapsed;
+        }
+    });
+
+    // Keyboard
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') goTo(current + 1);
+        if (e.key === 'ArrowLeft') goTo(current - 1);
+    });
+
+    // Confetti
+    function spawnConfetti() {
+        const container = document.getElementById('confetti');
+        container.innerHTML = '';
+        const colors = ['#00bfa5','#1de9b6','#a5d6a7','#ffffff','#ffd54f','#81c784','#4db6ac','#80cbc4'];
+
+        for (let i = 0; i < 60; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = Math.random() * 100 + '%';
+            piece.style.top = '-10px';
+            piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.width = (6 + Math.random() * 8) + 'px';
+            piece.style.height = (6 + Math.random() * 8) + 'px';
+            piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+            piece.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(piece);
+        }
+    }
+
+    // Intro hearts
+    const introHearts = document.getElementById('introHearts');
+    const heartGlyphs = ['🏔️', '🌲', '🌿', '🍃', '🌅', '⛰️', '🌄', '🥾'];
+    for (let i = 0; i < 30; i++) {
+        const h = document.createElement('div');
+        h.className = 'intro-heart';
+        h.textContent = heartGlyphs[Math.floor(Math.random() * heartGlyphs.length)];
+        h.style.left = Math.random() * 100 + '%';
+        h.style.fontSize = (22 + Math.random() * 32) + 'px';
+        h.style.animationDuration = (6 + Math.random() * 10) + 's';
+        h.style.animationDelay = Math.random() * 4 + 's';
+        introHearts.appendChild(h);
+    }
+
+    // Start
+    goTo(0);
+</script>
+
+</body>
+</html>

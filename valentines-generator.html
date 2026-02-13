@@ -1,0 +1,981 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Claudentines Wrapped</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <style>
+        *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+        html, body {
+            height: 100%;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: #e81b5b;
+            color: white;
+            overflow-x: hidden;
+            -webkit-font-smoothing: antialiased;
+        }
+
+        /* ── Screens ── */
+        .screen {
+            min-height: 100vh;
+            min-height: 100dvh;
+            display: none;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+            padding: 40px 24px;
+        }
+
+        .screen.active {
+            display: flex;
+        }
+
+        /* ── The Pink Gradient BG ── */
+        .bg-pink {
+            background: linear-gradient(180deg, #f74c89 0%, #e81b5b 35%, #d4145a 65%, #c0044d 100%);
+        }
+
+        .bg-dark {
+            background: #0a0a0a;
+        }
+
+        /* ── Hearts Layer ── */
+        .hearts-layer {
+            position: fixed;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            z-index: 1;
+            overflow: hidden;
+        }
+
+        .heart {
+            position: absolute;
+            animation: floatHeart linear infinite;
+            will-change: transform;
+        }
+
+        @keyframes floatHeart {
+            0% {
+                transform: translate(0, 0) rotate(0deg) scale(var(--s));
+                opacity: var(--o);
+            }
+            25% {
+                transform: translate(calc(var(--dx) * 0.5), -25vh) rotate(90deg) scale(var(--s));
+            }
+            50% {
+                transform: translate(var(--dx), -50vh) rotate(180deg) scale(var(--s));
+                opacity: var(--o);
+            }
+            75% {
+                transform: translate(calc(var(--dx) * 0.3), -75vh) rotate(270deg) scale(var(--s));
+            }
+            100% {
+                transform: translate(0px, -110vh) rotate(360deg) scale(var(--s));
+                opacity: 0;
+            }
+        }
+
+        /* ── Content (above hearts) ── */
+        .content {
+            position: relative;
+            z-index: 10;
+            text-align: center;
+            max-width: 560px;
+            width: 100%;
+        }
+
+        /* ── Typography ── */
+        .logo-heart {
+            font-size: 5rem;
+            display: block;
+            margin-bottom: 8px;
+            filter: drop-shadow(0 8px 24px rgba(0,0,0,0.2));
+            animation: heartBeat 2s ease-in-out infinite;
+        }
+
+        @keyframes heartBeat {
+            0%, 100% { transform: scale(1); }
+            14% { transform: scale(1.1); }
+            28% { transform: scale(1); }
+            42% { transform: scale(1.08); }
+            56% { transform: scale(1); }
+        }
+
+        .title {
+            font-size: clamp(3rem, 10vw, 5.5rem);
+            font-weight: 900;
+            line-height: 0.95;
+            letter-spacing: -2px;
+            text-shadow: 0 4px 20px rgba(0,0,0,0.15);
+            margin-bottom: 16px;
+        }
+
+        .subtitle {
+            font-size: clamp(0.9rem, 2.5vw, 1.15rem);
+            font-weight: 600;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.85;
+            text-shadow: 0 2px 8px rgba(0,0,0,0.1);
+        }
+
+        .description {
+            font-size: clamp(1rem, 2.5vw, 1.15rem);
+            font-weight: 500;
+            line-height: 1.7;
+            opacity: 0.9;
+            margin-top: 24px;
+            max-width: 420px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .small-note {
+            font-size: 0.78rem;
+            opacity: 0.5;
+            margin-top: 8px;
+            font-weight: 500;
+        }
+
+        /* ── Buttons ── */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            border: none;
+            border-radius: 60px;
+            font-family: inherit;
+            font-weight: 800;
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.34, 1.56, 0.64, 1);
+            text-decoration: none;
+            letter-spacing: 0.3px;
+        }
+
+        .btn-white {
+            background: white;
+            color: #d4145a;
+            padding: 18px 48px;
+            font-size: 1.05rem;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+        }
+
+        .btn-white:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 40px rgba(0,0,0,0.2);
+        }
+
+        .btn-white:active {
+            transform: scale(0.98);
+        }
+
+        .btn-pink {
+            background: linear-gradient(135deg, #f74c89, #e81b5b);
+            color: white;
+            padding: 18px 48px;
+            font-size: 1.05rem;
+            box-shadow: 0 8px 32px rgba(232, 27, 91, 0.4);
+        }
+
+        .btn-pink:hover {
+            transform: translateY(-2px) scale(1.03);
+            box-shadow: 0 12px 40px rgba(232, 27, 91, 0.5);
+        }
+
+        .btn-outline {
+            background: rgba(255,255,255,0.12);
+            color: white;
+            border: 2px solid rgba(255,255,255,0.3);
+            padding: 14px 36px;
+            font-size: 0.9rem;
+            backdrop-filter: blur(8px);
+        }
+
+        .btn-outline:hover {
+            background: rgba(255,255,255,0.2);
+            border-color: rgba(255,255,255,0.5);
+            transform: translateY(-1px);
+        }
+
+        .btn:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .btn-group {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 16px;
+            margin-top: 36px;
+        }
+
+        /* ── Input ── */
+        .input-wrapper {
+            margin-top: 32px;
+            width: 100%;
+            max-width: 380px;
+            margin-left: auto;
+            margin-right: auto;
+        }
+
+        .input-label {
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.7;
+            margin-bottom: 12px;
+            text-align: left;
+            display: block;
+        }
+
+        .name-input {
+            width: 100%;
+            padding: 18px 24px;
+            background: rgba(255,255,255,0.15);
+            border: 2px solid rgba(255,255,255,0.25);
+            border-radius: 16px;
+            color: white;
+            font-size: 1.2rem;
+            font-family: inherit;
+            font-weight: 700;
+            text-align: center;
+            outline: none;
+            transition: all 0.25s ease;
+            backdrop-filter: blur(8px);
+        }
+
+        .name-input::placeholder {
+            color: rgba(255,255,255,0.4);
+            font-weight: 500;
+        }
+
+        .name-input:focus {
+            border-color: rgba(255,255,255,0.6);
+            background: rgba(255,255,255,0.2);
+            box-shadow: 0 0 0 4px rgba(255,255,255,0.1);
+        }
+
+        /* ── Prompt Screen ── */
+        .prompt-screen-inner {
+            max-width: 640px;
+            width: 100%;
+        }
+
+        .prompt-header {
+            text-align: center;
+            margin-bottom: 32px;
+        }
+
+        .prompt-header h2 {
+            font-size: clamp(1.8rem, 5vw, 2.4rem);
+            font-weight: 900;
+            letter-spacing: -0.5px;
+            margin-bottom: 8px;
+            text-shadow: 0 2px 12px rgba(0,0,0,0.12);
+        }
+
+        .prompt-header p {
+            font-size: 0.95rem;
+            opacity: 0.85;
+            line-height: 1.6;
+        }
+
+        .prompt-box-wrap {
+            position: relative;
+            margin-bottom: 20px;
+        }
+
+        .prompt-box {
+            background: rgba(0,0,0,0.25);
+            border: 1px solid rgba(255,255,255,0.12);
+            border-radius: 16px;
+            padding: 28px;
+            font-family: 'SF Mono', 'Fira Code', 'Cascadia Code', monospace;
+            font-size: 0.8rem;
+            line-height: 1.8;
+            color: rgba(255,255,255,0.88);
+            max-height: 380px;
+            overflow-y: auto;
+            white-space: pre-wrap;
+            word-break: break-word;
+            scrollbar-width: thin;
+            scrollbar-color: rgba(255,255,255,0.2) transparent;
+            backdrop-filter: blur(16px);
+        }
+
+        .prompt-box::-webkit-scrollbar { width: 5px; }
+        .prompt-box::-webkit-scrollbar-track { background: transparent; }
+        .prompt-box::-webkit-scrollbar-thumb { background: rgba(255,255,255,0.2); border-radius: 3px; }
+
+        .copy-btn {
+            position: absolute;
+            top: 14px;
+            right: 14px;
+            background: rgba(255,255,255,0.15);
+            border: 1px solid rgba(255,255,255,0.2);
+            color: white;
+            padding: 8px 18px;
+            border-radius: 10px;
+            font-size: 0.78rem;
+            font-weight: 700;
+            font-family: inherit;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+            transition: all 0.2s ease;
+            z-index: 5;
+            backdrop-filter: blur(8px);
+        }
+
+        .copy-btn:hover { background: rgba(255,255,255,0.25); }
+        .copy-btn.copied { background: rgba(34,197,94,0.25); border-color: rgba(34,197,94,0.4); color: #4ade80; }
+
+        /* ── Instructions ── */
+        .instructions {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            padding: 28px;
+            margin-bottom: 20px;
+            backdrop-filter: blur(16px);
+        }
+
+        .instructions h3 {
+            font-size: 1rem;
+            font-weight: 800;
+            margin-bottom: 20px;
+        }
+
+        .inst-step {
+            display: flex;
+            gap: 14px;
+            margin-bottom: 18px;
+        }
+
+        .inst-step:last-child { margin-bottom: 0; }
+
+        .inst-num {
+            width: 26px; height: 26px;
+            border-radius: 50%;
+            background: rgba(255,255,255,0.2);
+            color: white;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 0.75rem;
+            font-weight: 800;
+            flex-shrink: 0;
+        }
+
+        .inst-text {
+            font-size: 0.88rem;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .inst-text strong { color: #fff; opacity: 1; }
+
+        .inst-text code {
+            background: rgba(255,255,255,0.15);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-size: 0.8rem;
+            font-family: 'SF Mono', 'Fira Code', monospace;
+        }
+
+        /* ── Gallery Section ── */
+        .gallery-divider {
+            width: 100%;
+            max-width: 640px;
+            text-align: center;
+            margin: 48px auto 32px;
+            position: relative;
+        }
+
+        .gallery-divider::before {
+            content: '';
+            position: absolute;
+            top: 50%;
+            left: 0;
+            right: 0;
+            height: 1px;
+            background: rgba(255,255,255,0.15);
+        }
+
+        .gallery-divider span {
+            background: transparent;
+            padding: 0 20px;
+            position: relative;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+            opacity: 0.6;
+        }
+
+        .gallery-section {
+            max-width: 640px;
+            width: 100%;
+            margin: 0 auto;
+            padding-bottom: 60px;
+        }
+
+        .gallery-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+
+        .gallery-header h3 {
+            font-size: 1.4rem;
+            font-weight: 900;
+            margin-bottom: 6px;
+        }
+
+        .gallery-header p {
+            font-size: 0.85rem;
+            opacity: 0.6;
+        }
+
+        .gallery-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 14px;
+        }
+
+        .gallery-card {
+            background: rgba(0,0,0,0.2);
+            border: 1px solid rgba(255,255,255,0.1);
+            border-radius: 16px;
+            overflow: hidden;
+            transition: all 0.25s ease;
+            cursor: pointer;
+            text-decoration: none;
+            color: inherit;
+            display: block;
+            backdrop-filter: blur(8px);
+        }
+
+        .gallery-card:hover {
+            border-color: rgba(255,255,255,0.25);
+            transform: translateY(-3px);
+            box-shadow: 0 12px 32px rgba(0,0,0,0.2);
+        }
+
+        .gallery-card-preview {
+            height: 120px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2.4rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .gallery-card-info {
+            padding: 14px 16px;
+            border-top: 1px solid rgba(255,255,255,0.08);
+        }
+
+        .gallery-card-names {
+            font-size: 0.88rem;
+            font-weight: 700;
+        }
+
+        .gallery-card-date {
+            font-size: 0.72rem;
+            opacity: 0.5;
+            margin-top: 3px;
+        }
+
+        /* ── Animations ── */
+        .fade-in {
+            animation: fadeIn 0.6s ease forwards;
+        }
+
+        .fade-in-up {
+            opacity: 0;
+            animation: fadeInUp 0.6s ease forwards;
+        }
+
+        .fade-in-up-d1 { animation-delay: 0.1s; }
+        .fade-in-up-d2 { animation-delay: 0.25s; }
+        .fade-in-up-d3 { animation-delay: 0.4s; }
+        .fade-in-up-d4 { animation-delay: 0.55s; }
+        .fade-in-up-d5 { animation-delay: 0.7s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        @keyframes fadeInUp {
+            from { opacity: 0; transform: translateY(24px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* ── Footer ── */
+        .footer {
+            text-align: center;
+            padding: 24px;
+            font-size: 0.75rem;
+            color: #3f3f46;
+        }
+
+        .footer a { color: #f74c89; text-decoration: none; }
+
+        /* ── Responsive ── */
+        @media (max-width: 520px) {
+            .screen { padding: 32px 20px; }
+            .gallery-grid { grid-template-columns: 1fr; }
+            .btn-white, .btn-pink { padding: 16px 36px; font-size: 0.95rem; }
+        }
+
+        /* ── Toast ── */
+        .toast {
+            position: fixed;
+            bottom: 28px;
+            left: 50%;
+            transform: translateX(-50%) translateY(80px);
+            background: #1e1e1e;
+            border: 1px solid #333;
+            color: #fafafa;
+            padding: 12px 24px;
+            border-radius: 12px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            box-shadow: 0 8px 32px rgba(0,0,0,0.5);
+            z-index: 1000;
+            transition: transform 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .toast.show {
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* ── Nav Back Button ── */
+        .back-link {
+            position: absolute;
+            top: 24px;
+            left: 24px;
+            z-index: 20;
+            background: rgba(255,255,255,0.1);
+            border: none;
+            color: white;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            backdrop-filter: blur(8px);
+            transition: background 0.2s;
+        }
+
+        .back-link:hover { background: rgba(255,255,255,0.2); }
+
+        .back-link-dark {
+            background: rgba(255,255,255,0.05);
+            color: #a1a1aa;
+        }
+
+        .back-link-dark:hover { background: rgba(255,255,255,0.1); color: white; }
+    </style>
+</head>
+<body>
+
+<div class="hearts-layer" id="heartsLayer"></div>
+<div class="toast" id="toast"></div>
+
+<!-- ═══════════ SCREEN 1: LANDING ═══════════ -->
+<div class="screen bg-pink active" id="screen1">
+    <div class="content">
+        <span class="logo-heart fade-in-up">❤️</span>
+        <h1 class="title fade-in-up fade-in-up-d1">Claudentines<br>Wrapped</h1>
+        <p class="subtitle fade-in-up fade-in-up-d2">A Valentine's Gift, Built by AI</p>
+        <p class="description fade-in-up fade-in-up-d3">
+            We'll generate a prompt you can paste into <strong>Claude Code</strong> to create a Spotify Wrapped-style story of your relationship — personalized with your real texts.
+        </p>
+        <div class="btn-group fade-in-up fade-in-up-d4">
+            <button class="btn btn-white" onclick="showScreen(2)">
+                Get Started
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+            <button class="btn btn-outline" onclick="showScreen(4)">
+                View Other Wrappeds
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ SCREEN 2: NAME INPUT ═══════════ -->
+<div class="screen bg-pink" id="screen2">
+    <button class="back-link" onclick="showScreen(1)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </button>
+    <div class="content">
+        <span class="logo-heart fade-in-up" style="font-size:3.5rem;">💕</span>
+        <h2 class="fade-in-up fade-in-up-d1" style="font-size:clamp(1.8rem,6vw,2.8rem); font-weight:900; letter-spacing:-1px; margin-bottom:8px;">Who's it for?</h2>
+        <p class="fade-in-up fade-in-up-d2" style="font-size:1rem; opacity:0.8; line-height:1.6;">Enter your partner's name so Claude Code can find and analyze your iMessage conversation with them.</p>
+
+        <div class="input-wrapper fade-in-up fade-in-up-d3">
+            <label class="input-label">Their first name</label>
+            <input class="name-input" type="text" id="partnerName" placeholder="e.g. Sarah" autocomplete="off" autofocus>
+            <p class="small-note">Nothing is stored — this is only used to generate your prompt.</p>
+        </div>
+
+        <div class="btn-group fade-in-up fade-in-up-d4">
+            <button class="btn btn-white" id="generateBtn" disabled onclick="generateAndShow()">
+                Generate My Prompt
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 3-1.912 5.813a2 2 0 0 1-1.275 1.275L3 12l5.813 1.912a2 2 0 0 1 1.275 1.275L12 21l1.912-5.813a2 2 0 0 1 1.275-1.275L21 12l-5.813-1.912a2 2 0 0 1-1.275-1.275L12 3Z"/></svg>
+            </button>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ SCREEN 3: PROMPT OUTPUT ═══════════ -->
+<div class="screen bg-dark" id="screen3" style="justify-content:flex-start; padding-top:80px;">
+    <button class="back-link back-link-dark" onclick="showScreen(2)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </button>
+    <div class="prompt-screen-inner">
+
+        <div class="prompt-header">
+            <h2>Your prompt is ready ✨</h2>
+            <p>Copy this and paste it into Claude Code. It'll build your entire Wrapped.</p>
+        </div>
+
+        <div class="prompt-box-wrap">
+            <button class="copy-btn" id="copyBtn" onclick="copyPrompt()">
+                <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                Copy
+            </button>
+            <div class="prompt-box" id="promptOutput"></div>
+        </div>
+
+        <div class="instructions">
+            <h3>How to use this</h3>
+
+            <div class="inst-step">
+                <div class="inst-num">1</div>
+                <div class="inst-text"><strong>Install Claude Code</strong> — open Terminal and run <code>npm install -g @anthropic-ai/claude-code</code></div>
+            </div>
+
+            <div class="inst-step">
+                <div class="inst-num">2</div>
+                <div class="inst-text"><strong>Create a folder</strong> — <code>mkdir valentines && cd valentines</code></div>
+            </div>
+
+            <div class="inst-step">
+                <div class="inst-num">3</div>
+                <div class="inst-text"><strong>Launch it</strong> — type <code>claude</code> and hit Enter</div>
+            </div>
+
+            <div class="inst-step">
+                <div class="inst-num">4</div>
+                <div class="inst-text"><strong>Paste the prompt</strong> above and let Claude build everything. It'll read your messages, crunch the stats, and create the whole Wrapped experience.</div>
+            </div>
+
+            <div class="inst-step">
+                <div class="inst-num">5</div>
+                <div class="inst-text"><strong>Open the file</strong> Claude creates and send her the link. You're done.</div>
+            </div>
+        </div>
+
+        <div style="text-align:center; margin-top:8px; margin-bottom:20px;">
+            <button class="btn btn-pink" onclick="copyPrompt()" style="width:100%; max-width:400px;">
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg>
+                Copy Prompt
+            </button>
+        </div>
+
+        <!-- Gallery Below -->
+        <div class="gallery-divider">
+            <span>or check these out</span>
+        </div>
+
+        <div class="gallery-section">
+            <div class="gallery-header">
+                <h3>Community Wrappeds 💕</h3>
+                <p>See what others have made</p>
+            </div>
+
+            <div class="gallery-grid" id="galleryGrid">
+                <!-- Populated by JS -->
+            </div>
+        </div>
+
+        <div class="footer">
+            Made with love, powered by <a href="https://claude.ai/download" target="_blank">Claude Code</a>
+        </div>
+    </div>
+</div>
+
+<!-- ═══════════ SCREEN 4: GALLERY (from landing) ═══════════ -->
+<div class="screen bg-dark" id="screen4" style="justify-content:flex-start; padding-top:80px;">
+    <button class="back-link back-link-dark" onclick="showScreen(1)">
+        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="m12 19-7-7 7-7"/><path d="M19 12H5"/></svg>
+    </button>
+    <div class="prompt-screen-inner">
+        <div class="gallery-header" style="margin-bottom:32px;">
+            <h3 style="font-size:clamp(1.6rem,5vw,2.2rem); font-weight:900; letter-spacing:-0.5px;">Community Wrappeds 💕</h3>
+            <p style="color:#71717a; margin-top:8px;">Real wrappeds made by real couples using Claudentines.</p>
+        </div>
+
+        <div class="gallery-grid" id="galleryGrid2">
+            <!-- Populated by JS -->
+        </div>
+
+        <div style="text-align:center; margin-top:40px;">
+            <button class="btn btn-pink" onclick="showScreen(1)">
+                Make Your Own
+                <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
+            </button>
+        </div>
+
+        <div class="footer">
+            Made with love, powered by <a href="https://claude.ai/download" target="_blank">Claude Code</a>
+        </div>
+    </div>
+</div>
+
+<script>
+// ── Hearts ──
+function spawnHearts() {
+    const layer = document.getElementById('heartsLayer');
+    const heartTypes = ['♥', '♡', '❤️', '💕', '💗', '💖', '💘', '💝', '💓', '💞', '🩷', '🤍', '🩵'];
+    const count = 80;
+
+    for (let i = 0; i < count; i++) {
+        const h = document.createElement('div');
+        h.className = 'heart';
+        h.textContent = heartTypes[Math.floor(Math.random() * heartTypes.length)];
+
+        const size = 0.6 + Math.random() * 1.8;
+        const opacity = 0.15 + Math.random() * 0.45;
+        const duration = 10 + Math.random() * 20;
+        const delay = Math.random() * duration;
+        const startX = Math.random() * 100;
+        const startY = Math.random() * 100;
+        const drift = -60 + Math.random() * 120;
+
+        h.style.cssText = `
+            left: ${startX}%;
+            top: ${startY}%;
+            font-size: ${size}rem;
+            --s: ${0.8 + Math.random() * 0.4};
+            --o: ${opacity};
+            --dx: ${drift}px;
+            animation-duration: ${duration}s;
+            animation-delay: -${delay}s;
+        `;
+
+        layer.appendChild(h);
+    }
+}
+spawnHearts();
+
+// ── Screen Navigation ──
+function showScreen(num) {
+    document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+    document.getElementById('screen' + num).classList.add('active');
+
+    // Toggle hearts visibility
+    const heartsLayer = document.getElementById('heartsLayer');
+    if (num === 1 || num === 2) {
+        heartsLayer.style.opacity = '1';
+        heartsLayer.style.transition = 'opacity 0.5s';
+    } else {
+        heartsLayer.style.opacity = '0';
+        heartsLayer.style.transition = 'opacity 0.5s';
+    }
+
+    window.scrollTo(0, 0);
+}
+
+// ── Name Input ──
+const nameInput = document.getElementById('partnerName');
+const genBtn = document.getElementById('generateBtn');
+
+nameInput.addEventListener('input', () => {
+    genBtn.disabled = !nameInput.value.trim();
+});
+
+nameInput.addEventListener('keydown', (e) => {
+    if (e.key === 'Enter' && nameInput.value.trim()) generateAndShow();
+});
+
+// ── Generate Prompt ──
+function generateAndShow() {
+    const name = nameInput.value.trim();
+    if (!name) return;
+
+    const prompt = generatePrompt(name);
+    document.getElementById('promptOutput').textContent = prompt;
+    showScreen(3);
+}
+
+function generatePrompt(partnerName) {
+    return `I want you to build a "Relationship Wrapped" — a Spotify Wrapped-style interactive story experience as a single HTML file. This is a Valentine's Day gift for my partner, ${partnerName}.
+
+STEP 1 — READ OUR IMESSAGE CONVERSATION:
+First, read our iMessage text history. The iMessage database is at ~/Library/Messages/chat.db — it's a SQLite database. Query it to find my conversation with "${partnerName}" (match on the display name or address in the 'handle' table). Extract ALL messages between us.
+
+From the messages, compute the following statistics:
+- Total message count (and per-person breakdown)
+- Date range (first message to today)
+- Messages per month (for a bar chart)
+- Busiest single day (most messages)
+- Peak texting hour (which hour of the day has the most messages)
+- Texting streak (longest consecutive-day streak)
+- Top 5 most-used words (excluding common stop words like "the", "a", "is", "it", "to", "and", "I", "you", "that", "in", "of", "for", "my", "on", "was", "do", etc.)
+- Top emoji used (with counts)
+- Reaction/tapback counts (❤️, 😂, 👍, etc.)
+- Pet names used (babe, baby, bb, bby, hun, love, etc.) with counts
+- First message ever sent between us (as a quote)
+- Any "I love you" messages (find the first one)
+- A funny or sweet memorable quote from each person
+
+STEP 2 — BUILD THE WRAPPED:
+Using ALL the real data you extracted, build a full-screen, mobile-first story experience (like Instagram Stories / Spotify Wrapped). Requirements:
+
+DESIGN:
+- Black background with bold, vibrant gradient backgrounds per slide (pinks, purples, corals, teals, oranges, deep blues — different per slide)
+- Clean sans-serif font (Google Fonts — Inter for body)
+- Smooth slide-up animations, scale-in effects for big numbers, staggered animation delays
+- Progress bar at top with segments for each slide
+- Tap/click navigation: left side = back, right side = forward
+- Hold to pause, keyboard arrow support
+- Auto-advance timer per slide (5-8 seconds)
+
+SLIDES TO CREATE (18-22 total, alternating between data slides and qualitative/vibes slides):
+
+--- DATA SLIDES ---
+
+1. INTRO: Title card — "Your Relationship Wrapped" with both names, date range. "Tap to begin →"
+
+2. TOTAL MESSAGES: Giant animated number of total messages. Per-day average. A fun comparison.
+
+3. THE BEGINNING: Show the actual first text messages between us in iMessage bubble style (blue = sent, gray = received). Include the date.
+
+4. TEXTING STREAK: Big fire emoji + streak number + "consecutive days". Note when it started.
+
+5. MONTHLY BREAKDOWN: Animated horizontal bar chart showing messages by month. Highlight the biggest month with a comment like "The falling-in-love month."
+
+6. PEAK HOURS: Big centered time (e.g. "11 PM") with count. Comment about being night owls or early birds.
+
+7. TOP WORDS: Ranked #1-#5 list styled like Spotify's "Top Artists." Show the word and count.
+
+8. TOP EMOJI: Show top 4 emoji with counts and fun one-line descriptions.
+
+9. PET NAMES: What we call each other, with counts. Warm styling.
+
+10. FIRST "I LOVE YOU": If found, show it in iMessage style with the date. If not found, skip this slide.
+
+--- QUALITATIVE / VIBES SLIDES ---
+For these, actually READ the text content deeply. Analyze the language, tone, inside jokes, topics, and emotional patterns to write insightful, specific, heartfelt copy. These should NOT be generic — they should feel like a best friend who's read every text wrote them. Use real quotes and references from the actual messages where possible.
+
+11. YOUR COUPLE VIBE: A fun personality card — "You two are the [specific archetype] couple." E.g. "The 2am-philosophy-debate, steal-each-other's-hoodies couple." Use emoji and a 2-3 line description that references real things from the texts.
+
+12. HOW YOU SHOW LOVE: Analyze how each person expresses affection in the texts. Does one send long paragraphs while the other sends rapid-fire messages? Does one use more emoji? More "I miss you"s? Present it like a love language breakdown with real examples.
+
+13. WHAT YOU LOVE MOST ABOUT EACH OTHER: Pull real compliments and sweet things each person has said about the other from the texts. Display as beautiful quote cards — things like "You're so thoughtful" or whatever they actually said.
+
+14. HOW YOU CONNECT: What do you actually talk about? Analyze the topics — is it deep life conversations at 1am? Sending each other memes? Planning adventures? Food recommendations? Present the top 3-4 ways you connect with icons and short descriptions.
+
+15. YOUR HUMOR STYLE: What makes you two laugh? Analyze the "haha", "lol", "😂", "💀" messages and what they're responding to. Categorize your shared humor — sarcasm? puns? absurdist? roasting each other lovingly? Give examples.
+
+16. THE THINGS ONLY YOU TWO SAY: Find inside jokes, recurring phrases, or weird things that come up repeatedly. Every couple has their own language — surface it. Show 3-4 of these with context.
+
+17. A LETTER FROM THE DATA: Write a short, heartfelt 4-5 sentence love letter as if the data itself is speaking. "In 13,000 messages, you never once went a day without saying goodnight..." — make it emotional and specific to what the texts actually show.
+
+18. YOUR FUTURE TOGETHER (playful): Based on current patterns, make fun predictions. "Based on your texting velocity, you'll hit 100,000 messages by [date]." "Your kids will definitely know the word [most-used word] before 'mama'." "You'll still be debating [recurring topic] in your 80s." Keep it lighthearted and cute.
+
+--- CLOSING ---
+
+19. MILESTONES: Vertical timeline — first text, first "I love you", biggest texting day, and today.
+
+20. FINALE: "Happy Valentine's Day, ${partnerName}" with confetti animation (CSS, no libraries), a heartfelt 3-line message, and a signature.
+
+IMPORTANT: Interleave the data slides and qualitative slides so it doesn't feel like "stats then feelings." Mix them together naturally — a data slide, then a vibes slide, then data, then vibes, etc. The qualitative slides are what make this special, so put real effort into making them specific and heartfelt based on the actual message content.
+
+TECHNICAL REQUIREMENTS:
+- Single HTML file, no external dependencies except Google Fonts
+- All CSS in <style>, all JS in <script>
+- No frameworks or build tools — vanilla HTML/CSS/JS only
+- CSS confetti animation on the final slide (animated divs, not canvas)
+- Progress bar with requestAnimationFrame
+- CSS @keyframes with animation-fill-mode: forwards
+- Mobile responsive, use CSS clamp() for fluid typography
+- CSS custom properties for colors
+
+Make it genuinely beautiful and emotional. Every slide should feel polished and personal. Use the REAL data from our conversation to make it authentic.
+
+Output a single file called valentines.html.`;
+}
+
+// ── Copy ──
+function copyPrompt() {
+    const text = document.getElementById('promptOutput').textContent;
+    navigator.clipboard.writeText(text).then(() => {
+        const btn = document.getElementById('copyBtn');
+        btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="20 6 9 17 4 12"/></svg> Copied!`;
+        btn.classList.add('copied');
+        showToast('Copied to clipboard!');
+        setTimeout(() => {
+            btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect width="14" height="14" x="8" y="8" rx="2"/><path d="M4 16c-1.1 0-2-.9-2-2V4c0-1.1.9-2 2-2h10c1.1 0 2 .9 2 2"/></svg> Copy`;
+            btn.classList.remove('copied');
+        }, 2500);
+    });
+}
+
+function showToast(msg) {
+    const t = document.getElementById('toast');
+    t.innerHTML = `<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#4ade80" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg> ${msg}`;
+    t.classList.add('show');
+    setTimeout(() => t.classList.remove('show'), 2500);
+}
+
+// ── Gallery Data ──
+const galleryItems = [
+    { names: 'Alex & Jordan', date: 'Jun 2024 – Feb 2025', emoji: '🔥', gradient: 'linear-gradient(135deg, #7c4dff, #1a1040)' },
+    { names: 'Sam & Riley', date: 'Mar 2025 – Feb 2026', emoji: '🌙', gradient: 'linear-gradient(135deg, #00bfa5, #0d3b3b)' },
+    { names: 'Chris & Morgan', date: 'Jan 2025 – Feb 2026', emoji: '☀️', gradient: 'linear-gradient(135deg, #ff9800, #e65100)' },
+];
+
+function renderGallery(containerId) {
+    const grid = document.getElementById(containerId);
+    grid.innerHTML = galleryItems.map((item, i) => `
+        <${item.url ? `a href="${item.url}"` : 'div'} class="gallery-card" ${!item.url ? 'style="opacity:0.5; pointer-events:none;"' : ''}>
+            <div class="gallery-card-preview" style="background:${item.gradient};">
+                <span style="font-size:2.8rem; filter:drop-shadow(0 2px 8px rgba(0,0,0,0.2));">${item.emoji}</span>
+            </div>
+            <div class="gallery-card-info">
+                <div class="gallery-card-names">${item.names}</div>
+                <div class="gallery-card-date">${item.date}${!item.url ? ' · Coming soon' : ''}</div>
+            </div>
+        </${item.url ? 'a' : 'div'}>
+    `).join('');
+}
+
+renderGallery('galleryGrid');
+renderGallery('galleryGrid2');
+</script>
+
+</body>
+</html>

@@ -1,0 +1,5 @@
+node_modules/
+claudentines.db
+claudentines.db-shm
+claudentines.db-wal
+.claude/

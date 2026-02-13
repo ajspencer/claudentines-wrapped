@@ -1,0 +1,1130 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <title>Claudentines Wrapped 2025</title>
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800;900&family=Dancing+Script:wght@700&display=swap');
+
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        :root {
+            --black: #121212;
+            --white: #ffffff;
+            --green: #1DB954;
+        }
+
+        html, body {
+            height: 100%;
+            overflow: hidden;
+            font-family: 'Inter', -apple-system, sans-serif;
+            background: var(--black);
+            color: var(--white);
+            -webkit-tap-highlight-color: transparent;
+            user-select: none;
+        }
+
+        /* ── Story Container ── */
+        .story-container {
+            position: relative;
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+
+        /* ── Progress Bar ── */
+        .progress-bar {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            display: flex;
+            gap: 4px;
+            padding: 12px 12px 0;
+            z-index: 100;
+        }
+
+        .progress-segment {
+            flex: 1;
+            height: 3px;
+            background: rgba(255,255,255,0.25);
+            border-radius: 3px;
+            overflow: hidden;
+        }
+
+        .progress-segment .fill {
+            height: 100%;
+            width: 0%;
+            background: white;
+            border-radius: 3px;
+            transition: width 0.1s linear;
+        }
+
+        .progress-segment.complete .fill { width: 100%; }
+        .progress-segment.active .fill { width: 0%; }
+
+        /* ── Navigation Zones ── */
+        .nav-left, .nav-right {
+            position: absolute;
+            top: 0;
+            bottom: 0;
+            width: 35%;
+            z-index: 50;
+            cursor: pointer;
+        }
+        .nav-left { left: 0; }
+        .nav-right { right: 0; width: 65%; }
+
+        /* ── Slide Base ── */
+        .slide {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            padding: 60px 32px 40px;
+            opacity: 0;
+            pointer-events: none;
+            transition: opacity 0.4s ease;
+            overflow: hidden;
+        }
+
+        .slide.active {
+            opacity: 1;
+            pointer-events: auto;
+        }
+
+        .slide .content {
+            max-width: 420px;
+            width: 100%;
+            text-align: left;
+        }
+
+        /* ── Typography ── */
+        .slide .eyebrow {
+            font-size: 0.75rem;
+            font-weight: 700;
+            letter-spacing: 2px;
+            text-transform: uppercase;
+            opacity: 0.7;
+            margin-bottom: 1.2rem;
+        }
+
+        .slide .big-number {
+            font-size: clamp(4rem, 15vw, 8rem);
+            font-weight: 900;
+            line-height: 0.95;
+            margin-bottom: 0.5rem;
+            letter-spacing: -3px;
+        }
+
+        .slide .big-text {
+            font-size: clamp(2.2rem, 7vw, 3.5rem);
+            font-weight: 900;
+            line-height: 1.05;
+            margin-bottom: 1rem;
+            letter-spacing: -1px;
+        }
+
+        .slide .medium-text {
+            font-size: clamp(1.3rem, 4vw, 1.8rem);
+            font-weight: 700;
+            line-height: 1.2;
+            margin-bottom: 0.8rem;
+        }
+
+        .slide .body-text {
+            font-size: clamp(0.95rem, 2.5vw, 1.1rem);
+            font-weight: 400;
+            line-height: 1.6;
+            opacity: 0.85;
+        }
+
+        .slide .small-text {
+            font-size: 0.85rem;
+            opacity: 0.6;
+            margin-top: 0.5rem;
+        }
+
+        .slide .accent {
+            color: var(--accent, #1DB954);
+        }
+
+        /* ── Animations ── */
+        .slide.active .anim-up {
+            animation: slideUp 0.6s ease forwards;
+        }
+
+        .slide.active .anim-up-delay-1 { animation: slideUp 0.6s ease 0.15s forwards; opacity: 0; }
+        .slide.active .anim-up-delay-2 { animation: slideUp 0.6s ease 0.3s forwards; opacity: 0; }
+        .slide.active .anim-up-delay-3 { animation: slideUp 0.6s ease 0.45s forwards; opacity: 0; }
+        .slide.active .anim-up-delay-4 { animation: slideUp 0.6s ease 0.6s forwards; opacity: 0; }
+        .slide.active .anim-up-delay-5 { animation: slideUp 0.6s ease 0.75s forwards; opacity: 0; }
+
+        @keyframes slideUp {
+            from { transform: translateY(40px); opacity: 0; }
+            to { transform: translateY(0); opacity: 1; }
+        }
+
+        .slide.active .anim-scale {
+            animation: scaleIn 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s forwards;
+            opacity: 0;
+        }
+
+        @keyframes scaleIn {
+            from { transform: scale(0.5); opacity: 0; }
+            to { transform: scale(1); opacity: 1; }
+        }
+
+        .slide.active .anim-count { animation: countPulse 0.4s ease 0.2s forwards; opacity: 0; }
+
+        @keyframes countPulse {
+            0% { transform: scale(0.7); opacity: 0; }
+            70% { transform: scale(1.05); }
+            100% { transform: scale(1); opacity: 1; }
+        }
+
+        /* ── Specific Slide Styles ── */
+
+        /* Bar chart */
+        .bar-chart {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+            margin: 1.5rem 0;
+            width: 100%;
+        }
+
+        .bar-row {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .bar-label {
+            font-size: 0.8rem;
+            font-weight: 600;
+            width: 36px;
+            text-align: right;
+            flex-shrink: 0;
+        }
+
+        .bar-track {
+            flex: 1;
+            height: 28px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .bar-fill {
+            height: 100%;
+            border-radius: 4px;
+            width: 0%;
+            transition: width 1s cubic-bezier(0.25, 0.46, 0.45, 0.94);
+        }
+
+        .slide.active .bar-fill {
+            width: var(--bar-width);
+        }
+
+        .bar-count {
+            font-size: 0.75rem;
+            font-weight: 700;
+            width: 48px;
+            opacity: 0.7;
+        }
+
+        /* Top list */
+        .top-list {
+            display: flex;
+            flex-direction: column;
+            gap: 14px;
+            margin: 1.5rem 0;
+        }
+
+        .top-item {
+            display: flex;
+            align-items: center;
+            gap: 14px;
+        }
+
+        .top-rank {
+            font-size: 1.8rem;
+            font-weight: 900;
+            opacity: 0.3;
+            width: 36px;
+            text-align: center;
+            flex-shrink: 0;
+        }
+
+        .top-info {
+            flex: 1;
+        }
+
+        .top-title {
+            font-size: 1.05rem;
+            font-weight: 700;
+        }
+
+        .top-sub {
+            font-size: 0.8rem;
+            opacity: 0.5;
+            margin-top: 2px;
+        }
+
+        .top-emoji-icon {
+            font-size: 2rem;
+            width: 44px;
+            height: 44px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            background: rgba(255,255,255,0.1);
+            border-radius: 10px;
+            flex-shrink: 0;
+        }
+
+        /* Quote card */
+        .quote-bubble {
+            background: rgba(255,255,255,0.1);
+            border-radius: 20px;
+            padding: 1.5rem;
+            margin: 1rem 0;
+            position: relative;
+        }
+
+        .quote-bubble .qt {
+            font-size: 1.05rem;
+            font-weight: 500;
+            line-height: 1.6;
+            font-style: italic;
+        }
+
+        .quote-bubble .qa {
+            font-size: 0.8rem;
+            font-weight: 700;
+            margin-top: 0.8rem;
+            opacity: 0.6;
+        }
+
+        /* iMessage recreation */
+        .imsg-thread {
+            display: flex;
+            flex-direction: column;
+            gap: 6px;
+            width: 100%;
+            margin: 1rem 0;
+        }
+
+        .imsg {
+            max-width: 85%;
+            padding: 10px 14px;
+            border-radius: 18px;
+            font-size: 0.95rem;
+            line-height: 1.45;
+        }
+
+        .imsg.sent {
+            align-self: flex-end;
+            background: #007AFF;
+            border-bottom-right-radius: 5px;
+        }
+
+        .imsg.recv {
+            align-self: flex-start;
+            background: rgba(255,255,255,0.15);
+            border-bottom-left-radius: 5px;
+        }
+
+        .imsg-time {
+            text-align: center;
+            font-size: 0.7rem;
+            opacity: 0.4;
+            margin: 6px 0;
+        }
+
+        /* Clock visualization */
+        .clock-ring {
+            width: 220px;
+            height: 220px;
+            margin: 1.5rem auto;
+            position: relative;
+        }
+
+        .clock-ring svg {
+            width: 100%;
+            height: 100%;
+            transform: rotate(-90deg);
+        }
+
+        .clock-center-text {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+
+        .clock-center-text .peak {
+            font-size: 2rem;
+            font-weight: 900;
+        }
+
+        .clock-center-text .peak-label {
+            font-size: 0.75rem;
+            opacity: 0.6;
+        }
+
+        /* Streak fire */
+        .streak-number {
+            font-size: clamp(5rem, 18vw, 10rem);
+            font-weight: 900;
+            line-height: 1;
+            letter-spacing: -4px;
+        }
+
+        /* CTA at bottom */
+        .slide-cta {
+            position: absolute;
+            bottom: 30px;
+            left: 50%;
+            transform: translateX(-50%);
+            font-size: 0.75rem;
+            font-weight: 600;
+            opacity: 0.4;
+            letter-spacing: 1px;
+            text-transform: uppercase;
+        }
+
+        /* Intro hearts */
+        .intro-hearts {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .intro-heart {
+            position: absolute;
+            opacity: 0;
+            font-size: 24px;
+        }
+
+        .slide.active .intro-heart {
+            animation: introFloat linear infinite;
+        }
+
+        @keyframes introFloat {
+            0% { transform: translateY(100vh) scale(0.6) rotate(0deg); opacity: 0; }
+            8% { opacity: 0.8; }
+            85% { opacity: 0.8; }
+            100% { transform: translateY(-10vh) scale(1.2) rotate(30deg); opacity: 0; }
+        }
+
+        .intro-pulse-heart {
+            font-size: clamp(5rem, 16vw, 9rem);
+            animation: bigPulse 2s ease-in-out infinite;
+            filter: drop-shadow(0 0 40px rgba(255,100,150,0.6));
+            margin-bottom: 0.5rem;
+        }
+
+        @keyframes bigPulse {
+            0%, 100% { transform: scale(1); filter: drop-shadow(0 0 40px rgba(255,100,150,0.6)); }
+            5% { transform: scale(1.15); filter: drop-shadow(0 0 60px rgba(255,100,150,0.8)); }
+            10% { transform: scale(1); }
+            15% { transform: scale(1.1); filter: drop-shadow(0 0 50px rgba(255,100,150,0.7)); }
+            20% { transform: scale(1); }
+        }
+
+        .intro-title {
+            font-size: clamp(2.2rem, 7vw, 3.8rem) !important;
+            font-weight: 900 !important;
+            line-height: 1.05 !important;
+            letter-spacing: -2px;
+            background: linear-gradient(180deg, #fff 30%, #ffc1d4 100%);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+
+        .intro-subtitle {
+            font-size: clamp(1rem, 3vw, 1.4rem) !important;
+            font-weight: 600 !important;
+            letter-spacing: 4px !important;
+            text-transform: uppercase;
+            opacity: 0.8;
+            margin-top: 0.8rem;
+        }
+
+        /* Gradient backgrounds */
+        .bg-intro { background: linear-gradient(150deg, #880e4f 0%, #e91e63 35%, #ff4081 60%, #f50057 100%); }
+        .bg-green { background: linear-gradient(150deg, #1a3a2a 0%, #1DB954 100%); }
+        .bg-pink { background: linear-gradient(150deg, #4a1942 0%, #e91e63 100%); }
+        .bg-orange { background: linear-gradient(150deg, #4a2c1a 0%, #e65100 70%, #ff8f00 100%); }
+        .bg-purple { background: linear-gradient(150deg, #1a1040 0%, #7c4dff 100%); }
+        .bg-teal { background: linear-gradient(150deg, #0d3b3b 0%, #00bfa5 100%); }
+        .bg-coral { background: linear-gradient(150deg, #4a1a2e 0%, #ff6b6b 100%); }
+        .bg-blue { background: linear-gradient(150deg, #0d1b3e 0%, #2979ff 100%); }
+        .bg-magenta { background: linear-gradient(150deg, #3e0d2e 0%, #d500f9 100%); }
+        .bg-sunset { background: linear-gradient(150deg, #4a1a0d 0%, #ff5722 50%, #ff9800 100%); }
+        .bg-deep { background: linear-gradient(150deg, #0a0a1a 0%, #1a237e 50%, #283593 100%); }
+        .bg-rose { background: linear-gradient(150deg, #3e1a2e 0%, #e91e63 50%, #f48fb1 100%); }
+        .bg-forest { background: linear-gradient(150deg, #0d2818 0%, #2e7d32 100%); }
+        .bg-warmgold { background: linear-gradient(150deg, #3e2a0d 0%, #f9a825 100%); }
+        .bg-finale { background: linear-gradient(150deg, #880e4f 0%, #e91e63 40%, #f06292 100%); }
+
+        /* Confetti */
+        .confetti-container {
+            position: absolute;
+            top: 0; left: 0; right: 0; bottom: 0;
+            pointer-events: none;
+            overflow: hidden;
+        }
+
+        .confetti-piece {
+            position: absolute;
+            width: 10px;
+            height: 10px;
+            opacity: 0;
+        }
+
+        .slide.active .confetti-piece {
+            animation: confettiFall linear forwards;
+        }
+
+        @keyframes confettiFall {
+            0% { transform: translateY(-20px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(110vh) rotate(720deg); opacity: 0.5; }
+        }
+    </style>
+</head>
+<body>
+
+<div class="story-container" id="stories">
+
+    <!-- Progress Bar -->
+    <div class="progress-bar" id="progressBar"></div>
+
+    <!-- Nav zones -->
+    <div class="nav-left" id="navLeft"></div>
+    <div class="nav-right" id="navRight"></div>
+
+    <!-- ═══ SLIDE 0: INTRO ═══ -->
+    <div class="slide bg-intro" data-duration="999999">
+        <div class="intro-hearts" id="introHearts"></div>
+        <div class="content" style="text-align:center; position:relative; z-index:2; max-width:600px;">
+            <div class="intro-pulse-heart anim-scale">🎵</div>
+            <div class="intro-title anim-up-delay-1" style="text-align:center;">Claudentines<br>Wrapped</div>
+            <div class="intro-subtitle anim-up-delay-2" style="text-align:center;">Our first 5 months</div>
+            <div class="small-text anim-up-delay-3" style="text-align:center; margin-top:2.5rem; letter-spacing:2px;">Tap to begin →</div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 1: TOTAL MESSAGES ═══ -->
+    <div class="slide bg-coral" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Since September 10</div>
+            <div class="body-text anim-up-delay-1">You two exchanged</div>
+            <div class="big-number anim-count" style="--accent:#ff6b6b;">15,234</div>
+            <div class="big-text anim-up-delay-2" style="font-size:clamp(1.4rem,4vw,2rem);">messages.</div>
+            <div class="body-text anim-up-delay-3" style="margin-top:1rem;">
+                That's roughly <strong>95 texts a day.</strong><br>
+                Every single day since open mic night.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 2: THE BEGINNING ═══ -->
+    <div class="slide bg-purple" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Where it started</div>
+            <div class="big-text anim-up-delay-1" style="font-size:clamp(1.5rem,5vw,2.2rem);">One song.<br>One stage.<br>One text.</div>
+            <div class="imsg-thread anim-up-delay-2">
+                <div class="imsg sent">Hey! You were incredible up there tonight. That cover of Fast Car literally gave me chills</div>
+                <div class="imsg recv">Omg thank you!! I almost didn't do it. Wait were you the one in the leather jacket in the front row?</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.6;">September 10, 2025</div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 3: FIRST DATE ═══ -->
+    <div class="slide bg-sunset" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">September 14, 2025</div>
+            <div class="big-text anim-up-delay-1">Your first date was at a record store.</div>
+            <div class="body-text anim-up-delay-2" style="margin-top:1rem;">
+                They spent two hours flipping through vinyl, debating album covers, and ended up at a coffee shop arguing about whether Rumours or Purple Rain was the better record. Neither won. Both were right.
+            </div>
+            <div class="imsg-thread anim-up-delay-3" style="margin-top:1rem;">
+                <div class="imsg sent">That record store on 5th still open? I have a theory about your music taste I need to test</div>
+                <div class="imsg recv">Omg yes. Saturday?? Prepare to be wrong about whatever this theory is</div>
+                <div class="imsg sent">It's a date</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 4: STREAK ═══ -->
+    <div class="slide bg-coral" data-duration="5000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">Your texting streak</div>
+            <div class="streak-number anim-scale" style="text-align:center;">🔥 158</div>
+            <div class="big-text anim-up-delay-2" style="text-align:center; font-size:clamp(1.3rem,4vw,1.8rem);">consecutive days</div>
+            <div class="body-text anim-up-delay-3" style="text-align:center; margin-top:1rem;">
+                You haven't missed a single day since September 10th.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 5: MONTHLY BREAKDOWN ═══ -->
+    <div class="slide bg-teal" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Messages by month</div>
+            <div class="medium-text anim-up-delay-1">October was your<br>most active month.</div>
+            <div class="bar-chart anim-up-delay-2">
+                <div class="bar-row">
+                    <div class="bar-label">Sep</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:65.7%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">2,340</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Oct</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:100%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">3,560</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Nov</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:87.6%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">3,120</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Dec</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:81.2%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">2,890</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Jan</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:71.3%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">2,540</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">Feb</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:22%; background: linear-gradient(90deg, #00bfa5, #1de9b6);"></div></div>
+                    <div class="bar-count">784</div>
+                </div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.6; font-size:0.85rem;">3,560 messages in October. The month the playlists never stopped.</div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 6: PEAK HOURS ═══ -->
+    <div class="slide bg-deep" data-duration="6000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">Your peak texting hour</div>
+            <div class="big-number anim-scale" style="text-align:center; font-size:clamp(4rem,14vw,7rem);">8 PM</div>
+            <div class="medium-text anim-up-delay-2" style="text-align:center;">1,680 messages sent between 8-9pm</div>
+            <div class="body-text anim-up-delay-3" style="text-align:center; margin-top:1rem; opacity:0.6;">
+                Right when the music starts.
+            </div>
+            <div class="body-text anim-up-delay-4" style="text-align:center; margin-top:0.5rem; opacity:0.4; font-size:0.85rem;">
+                Your evenings belong to each other.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 7: BUSIEST DAY ═══ -->
+    <div class="slide bg-orange" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your biggest texting day</div>
+            <div class="big-text anim-up-delay-1">October 31</div>
+            <div class="big-number anim-count" style="font-size:clamp(3rem,12vw,6rem);">489</div>
+            <div class="body-text anim-up-delay-2">messages in one day.</div>
+            <div class="body-text anim-up-delay-3" style="margin-top:1rem; opacity:0.7;">
+                Halloween concert, costume debate, post-show adrenaline. They didn't stop texting until 4am.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 8: TOP WORDS ═══ -->
+    <div class="slide bg-magenta" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your top words</div>
+            <div class="medium-text anim-up-delay-1">The words that defined you</div>
+            <div class="top-list">
+                <div class="top-item anim-up-delay-1">
+                    <div class="top-rank">1</div>
+                    <div class="top-info">
+                        <div class="top-title">song</div>
+                        <div class="top-sub">734 times — always another one to share</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-2">
+                    <div class="top-rank">2</div>
+                    <div class="top-info">
+                        <div class="top-title">love</div>
+                        <div class="top-sub">612 times — the word and the feeling</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-3">
+                    <div class="top-rank">3</div>
+                    <div class="top-info">
+                        <div class="top-title">listen</div>
+                        <div class="top-sub">498 times — "listen to this right now"</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-4">
+                    <div class="top-rank">4</div>
+                    <div class="top-info">
+                        <div class="top-title">play</div>
+                        <div class="top-sub">387 times — guitar, piano, records, everything</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-5">
+                    <div class="top-rank">5</div>
+                    <div class="top-info">
+                        <div class="top-title">feel</div>
+                        <div class="top-sub">312 times — because music is a feeling</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 9: TOP EMOJI ═══ -->
+    <div class="slide bg-forest" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your top emoji</div>
+            <div class="medium-text anim-up-delay-1">Expressed without words</div>
+            <div class="top-list">
+                <div class="top-item anim-up-delay-1">
+                    <div class="top-emoji-icon">🎵</div>
+                    <div class="top-info">
+                        <div class="top-title">🎵 × 278</div>
+                        <div class="top-sub">Your signature — music is the language</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-2">
+                    <div class="top-emoji-icon">🎶</div>
+                    <div class="top-info">
+                        <div class="top-title">🎶 × 198</div>
+                        <div class="top-sub">When one note isn't enough</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-3">
+                    <div class="top-emoji-icon">❤️</div>
+                    <div class="top-info">
+                        <div class="top-title">❤️ × 167</div>
+                        <div class="top-sub">Straight from the heart</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-4">
+                    <div class="top-emoji-icon">🔥</div>
+                    <div class="top-info">
+                        <div class="top-title">🔥 × 134</div>
+                        <div class="top-sub">That track is fire</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 10: TAPBACKS ═══ -->
+    <div class="slide bg-blue" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your tapback reactions</div>
+            <div class="medium-text anim-up-delay-1">You ❤️'d each other's texts a lot.</div>
+            <div class="bar-chart anim-up-delay-2">
+                <div class="bar-row">
+                    <div class="bar-label">❤️</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:100%; background: linear-gradient(90deg, #e91e63, #f48fb1);"></div></div>
+                    <div class="bar-count">567</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">😂</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:52.6%; background: linear-gradient(90deg, #ffb74d, #ffd54f);"></div></div>
+                    <div class="bar-count">298</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">👍</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:33%; background: linear-gradient(90deg, #64b5f6, #90caf9);"></div></div>
+                    <div class="bar-count">187</div>
+                </div>
+                <div class="bar-row">
+                    <div class="bar-label">‼️</div>
+                    <div class="bar-track"><div class="bar-fill" style="--bar-width:13.8%; background: linear-gradient(90deg, #ce93d8, #e1bee7);"></div></div>
+                    <div class="bar-count">78</div>
+                </div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.5; font-size:0.85rem;">
+                567 Loved texts. Every one a standing ovation.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 11: PET NAMES ═══ -->
+    <div class="slide bg-warmgold" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your pet names</div>
+            <div class="big-text anim-up-delay-1" style="font-size:clamp(1.5rem,5vw,2.2rem);">What you call each other</div>
+            <div class="top-list">
+                <div class="top-item anim-up-delay-2">
+                    <div class="top-rank" style="opacity:0.7; font-size:1.2rem;">💛</div>
+                    <div class="top-info">
+                        <div class="top-title">babe</div>
+                        <div class="top-sub">167 times — the classic hit</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-3">
+                    <div class="top-rank" style="opacity:0.7; font-size:1.2rem;">💛</div>
+                    <div class="top-info">
+                        <div class="top-title">rockstar</div>
+                        <div class="top-sub">89 times — because they are one</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-4">
+                    <div class="top-rank" style="opacity:0.7; font-size:1.2rem;">💛</div>
+                    <div class="top-info">
+                        <div class="top-title">love</div>
+                        <div class="top-sub">76 times — said with that tone</div>
+                    </div>
+                </div>
+            </div>
+            <div class="body-text anim-up-delay-5" style="opacity:0.6; font-size:0.85rem; margin-top:0.5rem;">
+                332 total pet names. That's about 2 per day.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 12: YOUR THINGS ═══ -->
+    <div class="slide bg-purple" data-duration="7000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your relationship personality</div>
+            <div class="big-text anim-up-delay-1" style="font-size:clamp(1.4rem,4.5vw,2rem);">Based on your texts, you're:</div>
+            <div class="quote-bubble anim-up-delay-2">
+                <div style="font-size:1.8rem; margin-bottom:0.5rem;">🎸🎵🎤🌙</div>
+                <div class="qt" style="font-style:normal; font-weight:700; font-size:1.2rem;">The "duet-in-the-car, curate-playlists-for-every-mood, fall-asleep-to-vinyl" couple</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="margin-top:1rem; opacity:0.7; font-size:0.9rem;">
+                They have a shared playlist that's 247 songs deep, argue about whether vinyl really sounds better (it does), and once stayed at a jazz bar until 2am on a Tuesday.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 13: FIRST I LOVE YOU ═══ -->
+    <div class="slide bg-rose" data-duration="8000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">November 22, 2025</div>
+            <div class="medium-text anim-up-delay-1" style="text-align:center;">The moment everything changed</div>
+            <div class="imsg-thread anim-up-delay-2" style="margin:1.5rem 0;">
+                <div class="imsg recv">You know that feeling when a song hits you right in the chest? That's what loving you feels like. I love you, Taylor</div>
+                <div class="imsg sent">I've been writing a song about you for weeks. I love you too 🎵</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="text-align:center; opacity:0.7;">
+                73 days after open mic night.<br>Your first "I love you."
+            </div>
+            <div class="body-text anim-up-delay-4" style="text-align:center; margin-top:1.5rem; opacity:0.5; font-size:0.85rem;">
+                Like the perfect key change — you just knew.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 14: QUOTE – Music Trust ═══ -->
+    <div class="slide bg-teal" data-duration="6000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">Casey's words</div>
+            <div class="quote-bubble anim-up-delay-1">
+                <div class="qt">"You're the only person whose music taste I actually trust. And I'm the pickiest person alive about music. That says everything."</div>
+                <div class="qa">— Casey</div>
+            </div>
+            <div class="body-text anim-up-delay-2" style="text-align:center; margin-top:1.5rem; opacity:0.5;">
+                The highest compliment a musician can give.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 15: QUOTE – Voice Memos ═══ -->
+    <div class="slide bg-orange" data-duration="6000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your signature move</div>
+            <div class="medium-text anim-up-delay-1">3am voice memos of new song ideas</div>
+            <div class="imsg-thread anim-up-delay-2" style="margin:1.2rem 0;">
+                <div class="imsg sent" style="font-size:0.9rem;">[voice memo]</div>
+                <div class="imsg recv" style="font-size:0.9rem;">IT'S 3AM</div>
+                <div class="imsg recv" style="font-size:0.9rem;">but also this is amazing don't stop</div>
+            </div>
+            <div class="body-text anim-up-delay-3" style="opacity:0.6;">
+                Inspiration doesn't check the clock. Neither does Taylor.
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 16: QUOTE – Perfect Song ═══ -->
+    <div class="slide bg-deep" data-duration="6000">
+        <div class="content" style="text-align:center;">
+            <div class="eyebrow anim-up" style="text-align:center;">What Taylor said about Casey</div>
+            <div class="quote-bubble anim-up-delay-1">
+                <div class="qt">"Being with you is like finding the perfect song you've never heard before — I just want to put it on repeat forever."</div>
+                <div class="qa">— Taylor</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 17: MILESTONES RECAP ═══ -->
+    <div class="slide bg-magenta" data-duration="8000">
+        <div class="content">
+            <div class="eyebrow anim-up">Your milestones</div>
+            <div class="medium-text anim-up-delay-1" style="margin-bottom:1.2rem;">What a setlist so far.</div>
+            <div class="top-list">
+                <div class="top-item anim-up-delay-1">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">🎤</div>
+                    <div class="top-info">
+                        <div class="top-title">Sep 10 — First text</div>
+                        <div class="top-sub">The night of open mic — "you were incredible"</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-2">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">🎸</div>
+                    <div class="top-info">
+                        <div class="top-title">Sep 14 — First date</div>
+                        <div class="top-sub">Record store + coffee + a vinyl debate</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-3">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">🎃</div>
+                    <div class="top-info">
+                        <div class="top-title">Oct 31 — Biggest texting day</div>
+                        <div class="top-sub">489 messages — Halloween concert madness</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-4">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">❤️</div>
+                    <div class="top-info">
+                        <div class="top-title">Nov 22 — First "I love you"</div>
+                        <div class="top-sub">"That's what loving you feels like"</div>
+                    </div>
+                </div>
+                <div class="top-item anim-up-delay-5">
+                    <div class="top-emoji-icon" style="font-size:1.2rem;">🎶</div>
+                    <div class="top-info">
+                        <div class="top-title">Dec — First song written together</div>
+                        <div class="top-sub">Two voices, one melody</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ═══ SLIDE 18: FINALE ═══ -->
+    <div class="slide bg-finale" data-duration="10000">
+        <div class="confetti-container" id="confetti"></div>
+        <div class="content" style="text-align:center;">
+            <div class="anim-scale" style="font-size:3rem; margin-bottom:1rem;">🎵</div>
+            <div class="big-text anim-up-delay-1" style="text-align:center; font-size:clamp(1.6rem,5vw,2.4rem);">
+                Happy Valentine's Day
+            </div>
+            <div class="body-text anim-up-delay-2" style="text-align:center; margin-top:1.5rem; line-height:1.8;">
+                From open mic night to 15,234 messages.<br>
+                From "you were incredible" to "I love you."<br>
+                From strangers in a crowded room to my favorite harmony.
+            </div>
+            <div class="body-text anim-up-delay-3" style="text-align:center; margin-top:1.5rem; opacity:0.7;">
+                Here's to every song, every late-night voice memo, every concert, and every melody still unwritten.
+            </div>
+            <div class="anim-up-delay-4" style="text-align:center; margin-top:2rem;">
+                <span style="font-family:'Dancing Script',cursive; font-size:1.6rem;">Yours, in every key 🎵</span>
+            </div>
+            <div style="margin-top:3rem; text-align:center; padding-top:1.5rem; border-top:1px solid rgba(255,255,255,0.15);" class="anim-up-delay-5">
+                <button id="shareBtn" onclick="shareToGallery()" style="background:rgba(255,255,255,0.15); border:2px solid rgba(255,255,255,0.3); color:white; padding:14px 32px; border-radius:50px; font-family:inherit; font-weight:700; font-size:0.9rem; cursor:pointer; transition:all 0.25s ease; backdrop-filter:blur(8px);">
+                    Share to Gallery 🌍
+                </button>
+                <p style="font-size:0.75rem; opacity:0.4; margin-top:8px;">List your Wrapped on the Claudentines gallery for others to see</p>
+                <div id="shareResult"></div>
+            </div>
+        </div>
+    </div>
+
+</div>
+
+<script>
+    // ── Share to Gallery ──
+    const WRAPPED_META = {
+        names: "Taylor & Casey",
+        date_range: "Sep 2025 – Feb 2026",
+        emoji: "🎵",
+        gradient: "linear-gradient(135deg, #ff6b6b, #c0392b)"
+    };
+
+    const GALLERY_SERVER = window.location.origin || 'http://localhost:3000';
+
+    async function shareToGallery() {
+        const btn = document.getElementById('shareBtn');
+        btn.textContent = 'Sharing...';
+        btn.disabled = true;
+        btn.style.opacity = '0.5';
+        try {
+            const res = await fetch(GALLERY_SERVER + '/api/wrappeds', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/json' },
+                body: JSON.stringify({
+                    ...WRAPPED_META,
+                    html_content: document.documentElement.outerHTML
+                })
+            });
+            const data = await res.json();
+            const link = GALLERY_SERVER + data.url;
+            document.getElementById('shareResult').innerHTML =
+                '<p style="margin-top:12px; font-size:0.85rem; opacity:0.7;">Listed on the gallery!</p>' +
+                '<a href="' + link + '" target="_blank" style="color:#f48fb1; font-weight:700; font-size:0.95rem; text-decoration:none;">' + link + '</a>';
+            btn.textContent = 'Listed! ✅';
+        } catch (e) {
+            btn.textContent = 'Failed — tap to retry';
+            btn.disabled = false;
+            btn.style.opacity = '1';
+        }
+    }
+
+    // ── Story Engine ──
+    const slides = document.querySelectorAll('.slide');
+    const progressBar = document.getElementById('progressBar');
+    let current = 0;
+    let timer = null;
+    let startTime = 0;
+    let elapsed = 0;
+    let paused = false;
+
+    // Build progress bar
+    slides.forEach((_, i) => {
+        const seg = document.createElement('div');
+        seg.className = 'progress-segment';
+        seg.innerHTML = '<div class="fill"></div>';
+        progressBar.appendChild(seg);
+    });
+
+    const segments = document.querySelectorAll('.progress-segment');
+
+    function goTo(index) {
+        if (index < 0 || index >= slides.length) return;
+
+        // Clear timer
+        if (timer) cancelAnimationFrame(timer);
+
+        // Update slides
+        slides[current].classList.remove('active');
+        current = index;
+        slides[current].classList.add('active');
+
+        // Update progress
+        segments.forEach((seg, i) => {
+            seg.classList.remove('active', 'complete');
+            seg.querySelector('.fill').style.width = '0%';
+            if (i < current) {
+                seg.classList.add('complete');
+                seg.querySelector('.fill').style.width = '100%';
+            }
+        });
+        segments[current].classList.add('active');
+
+        // Trigger confetti on last slide
+        if (current === slides.length - 1) spawnConfetti();
+
+        // Start timer
+        elapsed = 0;
+        startTime = performance.now();
+        startProgress();
+    }
+
+    function startProgress() {
+        const duration = parseInt(slides[current].dataset.duration) || 6000;
+        const fill = segments[current].querySelector('.fill');
+
+        function tick(now) {
+            if (paused) { timer = requestAnimationFrame(tick); return; }
+            const dt = now - startTime;
+            elapsed = dt;
+            const pct = Math.min((dt / duration) * 100, 100);
+            fill.style.width = pct + '%';
+
+            if (pct >= 100) {
+                if (current < slides.length - 1) {
+                    goTo(current + 1);
+                }
+                return;
+            }
+            timer = requestAnimationFrame(tick);
+        }
+        timer = requestAnimationFrame(tick);
+    }
+
+    // Navigation
+    document.getElementById('navLeft').addEventListener('click', (e) => {
+        e.stopPropagation();
+        goTo(current - 1);
+    });
+
+    document.getElementById('navRight').addEventListener('click', (e) => {
+        e.stopPropagation();
+        goTo(current + 1);
+    });
+
+    // Touch hold to pause
+    let holdTimer = null;
+    document.addEventListener('touchstart', () => {
+        holdTimer = setTimeout(() => { paused = true; }, 200);
+    });
+    document.addEventListener('touchend', () => {
+        clearTimeout(holdTimer);
+        if (paused) {
+            paused = false;
+            startTime = performance.now() - elapsed;
+        }
+    });
+
+    // Keyboard
+    document.addEventListener('keydown', (e) => {
+        if (e.key === 'ArrowRight' || e.key === ' ') goTo(current + 1);
+        if (e.key === 'ArrowLeft') goTo(current - 1);
+    });
+
+    // Confetti
+    function spawnConfetti() {
+        const container = document.getElementById('confetti');
+        container.innerHTML = '';
+        const colors = ['#e91e63','#f48fb1','#ff80ab','#ffffff','#ffd54f','#ff8a80','#ea80fc','#82b1ff'];
+
+        for (let i = 0; i < 60; i++) {
+            const piece = document.createElement('div');
+            piece.className = 'confetti-piece';
+            piece.style.left = Math.random() * 100 + '%';
+            piece.style.top = '-10px';
+            piece.style.background = colors[Math.floor(Math.random() * colors.length)];
+            piece.style.width = (6 + Math.random() * 8) + 'px';
+            piece.style.height = (6 + Math.random() * 8) + 'px';
+            piece.style.borderRadius = Math.random() > 0.5 ? '50%' : '2px';
+            piece.style.animationDuration = (2 + Math.random() * 3) + 's';
+            piece.style.animationDelay = Math.random() * 2 + 's';
+            container.appendChild(piece);
+        }
+    }
+
+    // Intro hearts
+    const introHearts = document.getElementById('introHearts');
+    const heartGlyphs = ['♥', '♡', '❤', '💕', '💗', '💖', '💘', '💝'];
+    for (let i = 0; i < 30; i++) {
+        const h = document.createElement('div');
+        h.className = 'intro-heart';
+        h.textContent = heartGlyphs[Math.floor(Math.random() * heartGlyphs.length)];
+        h.style.left = Math.random() * 100 + '%';
+        h.style.fontSize = (22 + Math.random() * 32) + 'px';
+        h.style.animationDuration = (6 + Math.random() * 10) + 's';
+        h.style.animationDelay = Math.random() * 4 + 's';
+        introHearts.appendChild(h);
+    }
+
+    // Start
+    goTo(0);
+</script>
+
+</body>
+</html>
